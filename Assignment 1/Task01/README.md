@@ -1,20 +1,21 @@
-Task 1 – Evaluate the Requirements of Each Computing Environment
+# Task 1 – Evaluate the Requirements of Each Computing Environment
 
-Student Details
+## Student Details
 
-Field| Details
-Name| Juhi Surin
-Register Number| 192525148
-Course| CSA0403 – Operating Systems
-Assignment| Assignment 1 – CO1
-Task| Task 1 – Requirements of Each Computing Environment
-Under the Supervision of| Dr. Velamurugan J.
+| Field | Details |
+|:---|:---|
+| Name | Juhi Surin |
+| Register Number | 192525148 |
+| Course | CSA0403 – Operating Systems |
+| Assignment | Assignment 1 – CO1 |
+| Task | Task 1 – Requirements of Each Computing Environment |
+| Under the Supervision of | Dr. Velmurugan J. |
 
-Objective
+## Objective
 
 To evaluate the operating-system requirements of different computing environments in a smart hospital based on response time, reliability, throughput, battery efficiency and security.
 
-Description
+## Description
 
 This task analyses the requirements of the following smart-hospital environments:
 
@@ -27,7 +28,7 @@ This task analyses the requirements of the following smart-hospital environments
 
 The requirements are ranked according to their importance in each environment. Special attention is given to patient safety, real-time response, reliability and information security.
 
-Key Concepts
+## Key Concepts
 
 - Response-time requirements
 - Reliability and availability
@@ -37,12 +38,14 @@ Key Concepts
 - Historical evolution of operating systems
 - Real-time operating-system requirements
 
-Evaluation
+## Evaluation
 
-Different computing environments require different operating-system characteristics. Bedside monitors require predictable alarm responses within 10 milliseconds, while handheld tablets prioritise battery efficiency and security. Database and imaging servers require high reliability and processing capability.
+Different computing environments require different operating-system characteristics.
+
+Bedside monitors require predictable alarm responses within 10 milliseconds, while handheld tablets prioritise battery efficiency and security. Database and imaging servers require high reliability and processing capability.
 
 Using one general-purpose operating system for every environment may not satisfy all these requirements.
 
-Result
+## Result
 
 The operating-system requirements of the smart-hospital environments were evaluated and prioritised. The analysis establishes that different environments need different OS configurations to achieve patient safety, reliability, performance and security.
