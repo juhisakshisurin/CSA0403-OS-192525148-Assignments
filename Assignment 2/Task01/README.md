@@ -1,4 +1,4 @@
-# Assignment 2 – Task 1: Processes and Process States
+# Assignment 2 – Task 1: Process Creation and Process Management
 
 ## Student Details
 
@@ -6,105 +6,155 @@
 |---|---|
 | **Name** | Juhi Surin |
 | **Register Number** | 192525148 |
+| **Course** | CSA0403 – Operating Systems |
+| **Assignment** | Assignment 2 – Task 1 |
 | **Date** | 03-11-2026 |
-| **Course** | CSA0403 – Computer Vision |
 | **Under the Supervision of** | Dr. Velmurugan J |
-| **Assignment** | Assignment 2 – CO2 |
-| **Task** | Task 1 / Q1 – Processes and Process States |
-| **Maximum Marks** | 6 |
 
-> **Course-code verification required:** The uploaded assignment PDF identifies Assignment 2 as **Operating Systems – CO2**, whereas the course supplied for this cover information is **CSA0403 – Computer Vision**. The supplied detail is reproduced exactly; confirm the correct course name/code with faculty before submission.
+---
 
-## Objective
-Model process states and the Process Control Block (PCB), implement process creation using `fork()`, observe processes using `ps` and `/proc`, and evaluate process-per-student, thread-per-student and fixed worker-process-pool designs for 2,000 concurrent examination sessions.
+## 1. Aim
 
-## Files
-```text
-CSA04-192525148-Assignment2/
-├── README.md
-└── Task01/
-    ├── README.md
-    ├── Task01_Report.pdf
-    ├── process_states.c
-    ├── run.sh
-    └── sample_execution_output.txt
+To understand process creation, parent-child relationships, process execution and process termination in a Linux operating system using the `fork()` and `waitpid()` system calls in C.
+
+## 2. Description
+
+This program demonstrates the creation and management of child processes using the `fork()` system call.
+
+The parent process creates three child processes. Each child process displays its Process ID (PID) and Parent Process ID (PPID), remains active for 8 seconds for process observation, and then terminates.
+
+The parent process uses `waitpid()` to wait for each child process and collect its termination status. Finally, the parent process displays a completion message.
+
+## 3. Files Included
+
+| File Name | Description |
+|---|---|
+| `process_states.c` | C source code implementing process creation and management. |
+| `run_task1.sh` | Shell script for compiling, executing and collecting process information. |
+| `Task1_Report.pdf` | Detailed assignment report. |
+| `program_output.txt` | Captured output of the C program, if generated. |
+| `process_observation.txt` | Process observation details using Linux commands, if generated. |
+| `environment.txt` | Compiler and operating system information, if generated. |
+
+## 4. Technologies and System Calls Used
+
+- **Programming Language:** C
+- **Operating System:** Ubuntu Linux (WSL 2)
+- **Compiler:** GCC
+
+### System Calls and Functions
+
+| Function | Purpose |
+|---|---|
+| `fork()` | Creates a new child process. |
+| `getpid()` | Retrieves the current process ID. |
+| `getppid()` | Retrieves the parent process ID. |
+| `waitpid()` | Waits for a specific child process to terminate. |
+| `sleep()` | Keeps child processes active for a specified duration. |
+| `_exit()` | Terminates a child process. |
+
+## 5. Compilation and Execution
+
+### Prerequisites
+
+- Ubuntu Linux or another compatible Linux environment.
+- GCC compiler installed.
+
+Install GCC if required:
+
+```bash
+sudo apt update
+sudo apt install build-essential -y
 ```
 
-## Tested Environment
-The program was compiled and executed in GCC 14.2.0 on Debian GNU/Linux 13 (trixie), Linux kernel 6.18.57. Verify your own environment with `gcc --version`, `cat /etc/os-release`, and `uname -sr`; update this table if your environment differs.
+### Step 1: Navigate to the project directory
 
-## Compile and Run
 ```bash
-gcc -std=c11 -Wall -Wextra -Wpedantic process_states.c -o process_states
+cd /mnt/c/Users/ashis/Downloads
+```
+
+### Step 2: Compile the C program
+
+```bash
+gcc -Wall -Wextra -std=c11 process_states.c -o process_states
+```
+
+### Step 3: Execute the program
+
+```bash
 ./process_states
 ```
-Or run `chmod +x run.sh && ./run.sh`.
 
-The program creates three child processes. Each sleeps for 12 seconds, during which the parent reads selected fields from `/proc/<PID>/status`. The parent then calls `waitpid()` for each child and reports its exit status.
+### Alternative: Execute using the shell script
 
-## Observe with ps and /proc
-While the children are sleeping, use the actual PIDs printed by your run:
+If `run_task1.sh` is included in the project folder, execute:
+
 ```bash
-ps -o pid,ppid,stat,comm -p <PID1>,<PID2>,<PID3>
-cat /proc/<PID1>/status
+chmod +x run_task1.sh
+./run_task1.sh
 ```
-`S` in the process state indicates interruptible sleeping. Capture your own screenshots while the children are alive and add them to this folder. The PIDs change on each execution.
 
-## Process-State Model
-- **New:** OS is creating the process and its kernel data structures.
-- **Ready:** Process is eligible for CPU time but waiting in the ready queue.
-- **Running:** CPU is executing the process.
-- **Waiting/Blocked:** Process awaits an event such as I/O completion.
-- **Terminated:** Execution has ended; the parent collects status with `wait()`/`waitpid()`.
+## 6. Sample Execution Output
+
+The following output was obtained during successful execution:
 
 ```text
-New --admitted--> Ready --dispatch--> Running --exit--> Terminated
-                       ^             |
-                       |             | I/O/event wait
-                  preemption          v
-                       +---------- Waiting
-                                    | event completion
-                                    v
-                                  Ready
+Parent process PID: 926
+Parent created child 1 with PID=927
+Child 1 started: PID=927, PPID=926
+Parent created child 2 with PID=928
+Child 2 started: PID=928, PPID=926
+Parent created child 3 with PID=929
+Child 3 started: PID=929, PPID=926
+Child 1 (PID=927) terminating.
+Child 2 (PID=928) terminating.
+Child 3 (PID=929) terminating.
+Parent reaped child PID=927, exit status=0
+Parent reaped child PID=928, exit status=0
+Parent reaped child PID=929, exit status=0
+Parent process completed.
 ```
 
-## Process Control Block (PCB)
-| PCB field | Purpose |
+**Note:** Process IDs may differ in subsequent executions. The output above represents the actual successful execution captured during testing.
+
+## 7. Execution Verification
+
+| Parameter | Observed Result |
 |---|---|
-| PID and parent PID | Identify process and parent |
-| Process state | Record ready/running/waiting/terminated status |
-| Program counter | Address of next instruction |
-| CPU registers | Preserve execution context across context switches |
-| Scheduling information | Priority, scheduling parameters and queue links |
-| Memory information | Address-space and page-table references |
-| I/O and file information | Open files, devices and pending I/O |
-| Accounting/security | CPU usage, user identity and permissions |
+| Parent Process ID | 926 |
+| Number of Child Processes | 3 |
+| Child Process 1 PID | 927 |
+| Child Process 2 PID | 928 |
+| Child Process 3 PID | 929 |
+| Parent-child relationship | Verified |
+| Child termination | Successful |
+| Exit status of all children | 0 |
+| Parent process completion | Successful |
 
-## Evaluation and Design Decision
-A process per student provides strong address-space isolation, but 2,000 processes require many process records, separate virtual address spaces and scheduling operations. Context switches can reduce useful CPU time, while I/O-blocked processes still consume process resources. A thread per student generally uses less memory because threads share code, data and open resources, but each has its own stack/context; shared data needs synchronization, and a process-wide failure can affect all its threads. A fixed worker-process pool bounds the number of worker processes and queues incoming sessions, balancing overhead and worker-level isolation. Its queue latency and pool size must be load-tested.
+## 8. Process Observation
 
-**Recommendation:** Use a bounded worker-process pool as the baseline, potentially with asynchronous I/O or a modest number of threads per worker. Measure response latency, throughput, memory, CPU utilization and failure recovery before selecting pool size.
+The program can be observed using Linux process-monitoring commands.
 
-## Alternative Concept and Complexity Analysis
-| Design | Approximate scaling for n sessions | Trade-off |
-|---|---|---|
-| One process/student | O(n) process records and separate address spaces | Strong isolation; highest memory/kernel overhead |
-| One thread/student | O(n) thread records/stacks; shared address space | Lower per-session overhead; synchronization and shared-failure risks |
-| Fixed pool of k workers | O(k) worker processes plus O(n) session/queue metadata | Bounded worker overhead; queueing and sizing trade-offs |
+### Display process information
 
-Creating n processes or threads requires O(n) creation operations. A worker pool creates k workers (O(k)); queue operations depend on the data structure (a suitable queue can provide O(1) enqueue/dequeue). Process context switches may involve address-space and TLB effects; same-process thread switches can avoid address-space changes. Actual timings depend on hardware, OS and workload, so do not claim fixed timings without measurements.
+```bash
+ps -o pid,ppid,state,comm -C process_states
+```
 
-## Result
-The program creates child processes with `fork()`, observes their parent relationship and sleeping state through `/proc`, and reaps them using `waitpid()`. The tested run showed `State: S (sleeping)` for each child, followed by exit status 0 when reaped.
+### View detailed process information
 
-## Evidence to Add Before Submission
-- [ ] Your screenshot of successful compilation and execution.
-- [ ] Your `ps` screenshot while children are alive.
-- [ ] Your `/proc/<PID>/status` screenshot.
-- [ ] Your own measurements if required by the instructor.
-- [ ] Actual GitHub URL in the report cover page and repository README.
-- [ ] Confirm the course code/name with faculty.
+```bash
+cat /proc/<PID>/status
+```
 
-## References
-1. Assignment 2 – CO2, Q1: Processes and Process States, supplied assignment PDF, page 12.
-2. Linux manual pages: `fork(2)`, `waitpid(2)`, `ps(1)`, and `proc(5)`.
+Replace `<PID>` with the actual process ID obtained during execution.
+
+These commands can be used while the child processes are active to inspect their process IDs, parent process IDs and execution states.
+
+## 9. Expected Outcome
+
+The program successfully demonstrates the creation of three child processes using `fork()`, establishes parent-child process relationships, and terminates the child processes safely using `waitpid()`.
+
+## 10. Result
+
+The C program was successfully compiled and executed in Ubuntu Linux using GCC. Three child processes were created, executed and terminated successfully. The parent process collected their exit statuses and completed execution without errors.
