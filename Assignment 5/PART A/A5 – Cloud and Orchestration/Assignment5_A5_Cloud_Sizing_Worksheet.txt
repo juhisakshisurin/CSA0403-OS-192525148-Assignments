@@ -1,0 +1,119 @@
+ASSIGNMENT 5 - PART A - A5
+CLOUD DEPLOYMENT AND KUBERNETES AUTOSCALING WORKSHEET
+
+A. FACTS GIVEN BY THE QUESTION
+- 150,000 students log in within a two-hour result-day window.
+- Current deployment uses one physical Linux server and fails during peak.
+- A cloud account is available.
+- The question gives no provider, region, concurrency, application request rate,
+  database size, network throughput, VM price or load-test results.
+
+Average login arrival across the two-hour window:
+150,000 / (2 * 60 * 60) = 20.83 logins per second.
+This is an average login arrival rate, not a peak request rate. One login may
+generate multiple web/API/database requests. Actual peak sizing needs load tests.
+
+B. ILLUSTRATIVE PLANNING ASSUMPTIONS (NOT MEASURED)
+- Normal-day minimum portal capacity: 3 app instances.
+- Result-day planning capacity: 8 app instances.
+- Each equivalent app instance: 1 vCPU request and 2 GiB RAM request.
+- HPA minimum: 3 replicas; HPA maximum: 8 replicas.
+- Peak-scale window: 4 hours on result day (2-hour stated login period plus
+  one hour pre-scaling and one hour cool-down/observation).
+- Year length for model: 365 days = 8,760 hours.
+- One VM in the fixed-VM alternative represents the capacity of one app instance.
+- The managed database and public load balancer remain provisioned in both cases.
+
+These values are illustrative. Replace 3/8 instances, per-instance CPU/RAM and
+the 4-hour event window with benchmark results and the institution's actual
+availability requirements.
+
+C. FIXED VM CAPACITY
+8 VMs * 1 vCPU = 8 vCPU reserved continuously.
+8 VMs * 2 GiB = 16 GiB RAM reserved continuously.
+3 instances are assumed sufficient on ordinary days.
+Extra capacity held beyond normal baseline:
+(8 - 3) = 5 instances = 5 vCPU + 10 GiB RAM.
+
+Over 364 ordinary days:
+5 * 24 * 364 = 43,680 extra-instance-hours.
+Unused/underused reserve equivalent:
+43,680 vCPU-hours and 87,360 GiB-hours.
+
+Full-year fixed compute:
+8 * 8,760 = 70,080 instance-hours.
+
+D. HPA COMPUTE MODEL
+Baseline:
+3 replicas * 8,760 hours = 26,280 replica-hours.
+Extra result-day replicas:
+(8 - 3) * 4 hours = 20 replica-hours.
+Total estimated annual app replica-hours:
+26,280 + 20 = 26,300 replica-hours.
+
+Illustrative reduction in app replica-hours:
+(70,080 - 26,300) / 70,080 * 100 = 62.47%.
+
+This is an application-capacity proxy only. It does not equal total cloud-bill
+savings. Kubernetes control plane, node capacity, load balancer, database,
+storage, backups, network egress, monitoring and support still cost money.
+Use managed node autoscaling (cluster autoscaler or provider equivalent) so
+worker nodes can also scale down; HPA alone scales Pods, not cloud VMs/nodes.
+
+E. MONTHLY / YEARLY COST FORMULAS
+Fixed-VM annual compute cost:
+8 VMs * 8,760 hours * hourly VM price.
+
+Autoscaled app compute:
+(26,300 replica-hours * equivalent hourly app-instance price)
++ managed Kubernetes control-plane charge
++ worker-node idle/headroom cost
++ load balancer
++ managed database
++ persistent storage and backups
++ network egress
++ observability and support.
+
+For a provider quote, record:
+Provider and region:
+VM / node family:
+Hourly VM or node price:
+Kubernetes control-plane charge:
+Load-balancer charge:
+Managed database class and hours:
+Storage GB-month:
+Backup storage:
+Network egress:
+Monitoring/logging:
+Tax/currency:
+Total fixed-VM estimate:
+Total HPA/Kubernetes estimate:
+
+F. RESULT-DAY RESPONSE-TIME DISCUSSION
+Fixed VMs:
+- Capacity is already running when the spike begins, so no scale-out wait is
+  introduced, provided the load balancer, database and VM capacity are healthy.
+- Capacity beyond the normal baseline remains unused on ordinary days.
+- Fixed capacity can still fail if the workload exceeds the estimate.
+
+Kubernetes HPA:
+- HPA reacts to observed metrics and does not predict future demand by itself.
+- Pod scheduling, image pulls, startup/readiness and node provisioning take time.
+- For a known result-release time, pre-scale the Deployment before the event.
+- Use a minimum replica count, warm nodes, readiness probes and a load test.
+- HPA uses CPU request values for CPU-utilisation percentages; a compatible
+  metrics API (commonly metrics-server for resource metrics) is required.
+- HPA scales Pods; node autoscaling is needed if the cluster lacks spare nodes.
+
+G. FINAL MEASUREMENTS TO FILL AFTER A TEST
+Peak requests/sec:
+Concurrent users:
+p50 response time:
+p95 response time:
+p99 response time:
+Error rate:
+HPA minimum / maximum observed replicas:
+Scale-up delay:
+Node provisioning delay:
+Database CPU / connections:
+Actual monthly cost:
