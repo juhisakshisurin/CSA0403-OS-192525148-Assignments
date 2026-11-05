@@ -7,127 +7,117 @@
 | **Name** | Juhi Surin |
 | **Register Number** | 192525148 |
 | **Course** | CSA0403 – Operating Systems |
-| **Assignment** | Assignment 2 – CO2 |
-| **Task** | Task 2 – CPU Scheduling |
-| **Date** | 03-11-2026 |
-| **Under the Supervision of** | Dr. Velmurugan J |
 
----
+## 1. Task Overview
 
-## 1. Introduction
+Task 2 (Q2 – CPU Scheduling, 8 Marks, K5 – Evaluate) analyses CPU scheduling for a cloud video-encoding service that handles short thumbnail jobs and long full-film jobs.
 
-CPU Scheduling is an essential function of an operating system that determines which process gets access to the CPU and for how long.
+The task requires Gantt charts and performance calculations for FCFS, SJF, SRTF, Priority Scheduling and Round Robin; a working Round Robin implementation; a time-quantum investigation; starvation and ageing analysis; an MLFQ explanation; and a justified scheduling recommendation.
 
-This task focuses on analysing different CPU scheduling algorithms in the context of a cloud video-encoding service. It examines how scheduling decisions affect process waiting time, turnaround time, response time, fairness and context-switch overhead.
+## 2. Given Process Data
 
-## 2. Aim
+| Process | Arrival Time | Burst Time |
+|---|---:|---:|
+| P1 | 0 | 8 |
+| P2 | 1 | 4 |
+| P3 | 2 | 9 |
+| P4 | 3 | 5 |
 
-To study, analyse and compare different CPU scheduling algorithms, calculate their performance measures, implement Round Robin scheduling and identify a suitable scheduling approach for a cloud video-encoding workload.
+**Priority note:** The assignment does not specify numeric priorities. The report uses an explicitly labelled illustrative assumption (lower number = higher priority): P1=3, P2=1, P3=4, P4=2. Replace these values if your instructor provides a priority table.
 
-## 3. Objectives
+## 3. Files Included
 
-- Understand the working principles of CPU scheduling algorithms.
-- Construct Gantt charts for process execution.
-- Calculate completion time, turnaround time, waiting time and response time.
-- Compare scheduling algorithms using their performance measures.
-- Implement Round Robin scheduling using C.
-- Analyse the effect of different time quantum values.
-- Understand starvation and the ageing technique.
-- Study Multilevel Feedback Queue scheduling.
-- Recommend a suitable scheduling policy for the given workload.
-
-## 4. Topics Covered
-
-The report covers the following CPU scheduling algorithms and concepts:
-
-| Topic | Description |
+| File | Description |
 |---|---|
-| First Come First Serve (FCFS) | Schedules processes according to their arrival order. |
-| Shortest Job First (SJF) | Selects the available process with the shortest CPU burst time. |
-| Shortest Remaining Time First (SRTF) | Selects the process with the shortest remaining execution time. |
-| Priority Scheduling | Selects processes according to their assigned priorities. |
-| Round Robin (RR) | Allocates CPU time using a fixed time quantum. |
-| Starvation | Examines indefinite waiting of processes. |
-| Ageing | Explains priority adjustment to reduce starvation. |
-| Multilevel Feedback Queue (MLFQ) | Examines scheduling using multiple priority queues. |
+| `Assignment2_Task02_Report.pdf` | Complete report with algorithms, Gantt charts, calculations, Round Robin quantum analysis, starvation, ageing, MLFQ, recommendation and complexity analysis. |
+| `round_robin.c` | Completed C implementation of the assignment's Round Robin TODO. Default quantum is 3. |
+| `program_output_q3.txt` | Output produced by running the program with quantum 3. |
+| `README.md` | Task documentation, student details and execution instructions. |
 
-## 5. Performance Measures
-
-The following parameters are used to evaluate scheduling performance:
-
-| Parameter | Formula / Meaning |
-|---|---|
-| Completion Time (CT) | Time at which a process finishes execution. |
-| Turnaround Time (TAT) | Completion Time − Arrival Time |
-| Waiting Time (WT) | Turnaround Time − Burst Time |
-| Response Time (RT) | First CPU Start Time − Arrival Time |
-| Average Waiting Time | Total Waiting Time / Number of Processes |
-| Average Turnaround Time | Total Turnaround Time / Number of Processes |
-
-## 6. Round Robin Implementation
-
-The assignment includes a Round Robin scheduling implementation using the C programming language.
-
-The implementation uses process arrival times, burst times, remaining burst times and a ready queue to simulate CPU allocation.
-
-The program is analysed using the time quantum values specified in the assignment:
-
-- Quantum = 1
-- Quantum = 3
-- Quantum = 5
-- Quantum = 20
-
-The results are compared using average waiting time and context switches.
-
-## 7. System Requirements
+## 4. Requirements
 
 | Component | Requirement |
 |---|---|
-| Programming Language | C |
+| Language | C |
 | Compiler | GCC |
-| Operating System | Ubuntu Linux / WSL 2 |
-| Platform | Linux-compatible environment |
-| Implementation | Round Robin CPU Scheduling |
+| Operating System | Linux / Ubuntu / WSL 2 |
+| Standard | C11 |
 
-## 8. Compilation and Execution
+Record the actual environment used for your own execution:
 
-If the Round Robin source code is maintained as a separate file, use the following commands from its project directory.
+```bash
+gcc --version
+lsb_release -a
+uname -r
+```
+
+## 5. Compilation and Execution
+
+Open Ubuntu/WSL terminal and navigate to the folder containing `round_robin.c`.
 
 ### Compile
 
 ```bash
-gcc -Wall -Wextra -std=c11 cpu_scheduling.c -o cpu_scheduling
+gcc -std=c11 -Wall -Wextra round_robin.c -o round_robin
 ```
 
-### Execute
+### Run
 
 ```bash
-./cpu_scheduling
+./round_robin
 ```
 
-**Note:** Update the source filename or executable name if your actual implementation uses a different name.
+The program uses `quantum = 3` by default. Its TAT and WT values should match the assignment's expected output:
 
-## 9. Files Included
+- P1: TAT 23, WT 15
+- P2: TAT 15, WT 11
+- P3: TAT 24, WT 15
+- P4: TAT 18, WT 13
+- Average TAT: 20.00
+- Average WT: 13.50
 
-| File Name | Description |
-|---|---|
-| `Task2_Report.pdf` | Complete academic report containing scheduling explanations, calculations, Gantt charts, comparisons and conclusions. |
-| `README.md` | Documentation describing the task, objectives, concepts and report contents. |
+## 6. Testing Quantum 1 and Quantum 20
 
-**Note:** If the Round Robin implementation is submitted separately, include its actual C source code and execution evidence in the Task 2 folder as required by the assignment.
+The assignment specifically asks for quantum 1 and quantum 20 in addition to the supplied quantum 3. Change this line in `round_robin.c`:
 
-## 10. Expected Outcome
+```c
+int quantum = 3;
+```
 
-The task aims to demonstrate an understanding of CPU scheduling algorithms and their impact on operating system performance.
+For quantum 1, change it to:
 
-It also develops the ability to calculate scheduling metrics, implement Round Robin scheduling, analyse time quantum values and evaluate starvation-prevention techniques.
+```c
+int quantum = 1;
+```
 
-## 11. Result
+Then compile and execute again:
 
-The CPU scheduling algorithms and their performance characteristics are analysed through scheduling calculations, Gantt charts and comparative evaluation. Round Robin scheduling is studied through C implementation, and a suitable scheduling approach is recommended for the given cloud video-encoding workload based on the analysis.
+```bash
+gcc -std=c11 -Wall -Wextra round_robin.c -o round_robin
+./round_robin
+```
 
----
+Repeat with `int quantum = 20;`. Save the outputs separately, for example `output_q1.txt` and `output_q20.txt`. Keep the quantum-3 output as `program_output_q3.txt`.
 
-**Course:** CSA0403 – Operating Systems  
-**Assignment:** Assignment 2 – CO2  
-**Task:** Task 2 – CPU Scheduling
+## 7. Performance Measures
+
+- Completion Time (CT): time when a process finishes.
+- Turnaround Time (TAT): CT − Arrival Time.
+- Waiting Time (WT): TAT − Burst Time.
+- Response Time (RT): First CPU Start Time − Arrival Time.
+- Speed/quantum comparison should use the same arrival and burst data for every run.
+
+The report counts a context switch as a transition between two different processes in consecutive CPU execution segments. The initial dispatch is not counted.
+
+## 8. Result
+
+The task compares five CPU scheduling algorithms and evaluates Round Robin with different time quantum values. It also analyses starvation, ageing and MLFQ to recommend a scheduling policy for a mixed short-job and long-job video-encoding workload.
+
+## 9. Submission Reminder
+
+The assignment requires a GitHub repository named:
+
+`CSA04-192525148-Assignment2`
+
+Maintain a separate folder for each task. Include the report, C source, actual program outputs and screenshots as required. Record your own GCC version and Linux distribution/version. Commit your work progressively and add the working GitHub repository link to the report cover page if required by your faculty.
+
