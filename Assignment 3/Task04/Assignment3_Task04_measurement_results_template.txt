@@ -1,0 +1,39 @@
+Assignment 3 – Task 4: Local Measurement Worksheet
+
+A. Environment
+- GCC:
+- Kernel:
+- RAM total:
+- MemAvailable before experiment:
+- Swap total / free:
+- Native page size:
+
+B. Sequential / random access (memory_access_results.txt)
+| Working set | Order | Runtime (ms) | Minor faults | Major faults |
+|---:|---|---:|---:|---:|
+| | Sequential | | | |
+| | Random | | | |
+| | Sequential | | | |
+| | Random | | | |
+| | Sequential | | | |
+| | Random | | | |
+
+C. Copy-on-write (cow_fork_results.txt)
+- Parent before fork: RSS / PSS / Private_Dirty:
+- Child after fork before writes: RSS / PSS / Shared_Dirty / Private_Dirty:
+- Child after writes: RSS / PSS / Private_Dirty:
+- Interpretation:
+
+D. Frame-count plot
+- CSV: frame_faults.csv
+- Plot: frame_faults.png
+
+E. 32 GB alternative
+- Representative measured application fault rate:
+- EAT at 16 GB:
+- Expected/observed fault rate at 32 GB:
+- EAT at 32 GB:
+- Additional RAM cost:
+- Runtime saved:
+
+Do not use measurements from another computer as your own.
