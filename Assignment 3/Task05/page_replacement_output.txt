@@ -1,0 +1,74 @@
+=== Given 20-reference string ===
+Reference string: 7 0 1 2 0 3 0 4 2 3 0 3 2 1 2 0 1 7 0 1
+3 frames: FIFO 15, LRU 12, Optimal 9
+4 frames: FIFO 10, LRU 8, Optimal 8
+Belady string, FIFO: 3 frames 9 faults, 4 frames 10 faults
+
+=== Generate workloads and count faults for 3-10 frames ===
+Saved faults_locality.csv and faults_random.csv.
+=== Runtime benchmark: 100,000 references, median of 3 runs ===
+Workload          Algorithm  Frames  Median ms       Faults
+StrongLocality    FIFO       3           0.506      69630
+StrongLocality    FIFO       4           0.584      60156
+StrongLocality    FIFO       5           0.631      51206
+StrongLocality    FIFO       6           0.715      43101
+StrongLocality    FIFO       7           0.761      35803
+StrongLocality    FIFO       8           0.921      30184
+StrongLocality    FIFO       9           0.928      25790
+StrongLocality    FIFO      10           0.837      22504
+StrongLocality    LRU        3           0.551      69127
+StrongLocality    LRU        4           0.651      59443
+StrongLocality    LRU        5           0.974      49716
+StrongLocality    LRU        6           1.053      40081
+StrongLocality    LRU        7           1.282      31193
+StrongLocality    LRU        8           1.041      23147
+StrongLocality    LRU        9           1.047      17008
+StrongLocality    LRU       10           1.270      12927
+StrongLocality    Optimal    3           1.120      47790
+StrongLocality    Optimal    4           1.135      36452
+StrongLocality    Optimal    5           1.137      27762
+StrongLocality    Optimal    6           1.246      20916
+StrongLocality    Optimal    7           1.114      15520
+StrongLocality    Optimal    8           1.092      11425
+StrongLocality    Optimal    9           1.107      8615
+StrongLocality    Optimal   10           1.127      7687
+StrongLocality    Clock      3           0.858      69480
+StrongLocality    Clock      4           0.999      60016
+StrongLocality    Clock      5           1.130      50578
+StrongLocality    Clock      6           1.174      41870
+StrongLocality    Clock      7           1.310      33698
+StrongLocality    Clock      8           1.232      26604
+StrongLocality    Clock      9           1.234      21056
+StrongLocality    Clock     10           1.242      17068
+Random            FIFO       3           0.335      95299
+Random            FIFO       4           0.362      93738
+Random            FIFO       5           0.427      92221
+Random            FIFO       6           0.482      90657
+Random            FIFO       7           0.403      89089
+Random            FIFO       8           0.416      87489
+Random            FIFO       9           0.699      85900
+Random            FIFO      10           0.592      84365
+Random            LRU        3           0.427      95297
+Random            LRU        4           0.507      93742
+Random            LRU        5           0.662      92199
+Random            LRU        6           0.929      90636
+Random            LRU        7           1.174      89059
+Random            LRU        8           1.318      87530
+Random            LRU        9           1.682      85900
+Random            LRU       10           1.714      84413
+Random            Optimal    3           0.993      81575
+Random            Optimal    4           1.258      76348
+Random            Optimal    5           1.255      71983
+Random            Optimal    6           1.707      68169
+Random            Optimal    7           1.574      64757
+Random            Optimal    8           1.534      61652
+Random            Optimal    9           1.475      58806
+Random            Optimal   10           1.842      56168
+Random            Clock      3           0.846      95304
+Random            Clock      4           0.740      93737
+Random            Clock      5           0.888      92211
+Random            Clock      6           0.973      90638
+Random            Clock      7           1.163      89082
+Random            Clock      8           1.472      87523
+Random            Clock      9           1.394      85961
+Random            Clock     10           1.474      84405
