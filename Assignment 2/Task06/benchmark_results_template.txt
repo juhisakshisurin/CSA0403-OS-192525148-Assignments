@@ -1,0 +1,10 @@
+Banker's Algorithm – Measurement Results
+Record timings from your own Ubuntu/WSL run of bankers_benchmark.
+
+| Number of processes (n) | Resource types (m) | Median time per safety check (ms) | Result |
+|---:|---:|---:|---|
+| 10 | 3 | | SAFE |
+| 100 | 3 | | SAFE |
+| 1,000 | 3 | | SAFE |
+
+Prediction for fixed m: worst-case O(m*n^2), so increasing n tenfold should increase the worst-case operation count by approximately 100 times.
