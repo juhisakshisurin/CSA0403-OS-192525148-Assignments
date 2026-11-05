@@ -1,0 +1,17 @@
+RAID capacity for 6 disks × 4 TB (decimal drive units)
+RAID 1 assumes all disks form one n-way mirror; RAID 10 assumes paired mirrors.
+RAID 0                      : 24 TB usable (before filesystem/metadata overhead)
+RAID 1 (one n-way mirror)   : 4 TB usable (before filesystem/metadata overhead)
+RAID 5                      : 20 TB usable (before filesystem/metadata overhead)
+RAID 10 (n even)            : 12 TB usable (before filesystem/metadata overhead)
+RAID 6                      : 16 TB usable (before filesystem/metadata overhead)
+
+Illustrative independent-drive failure model: p=0.02 per disk per chosen interval
+Assumes failures occur within the same interval, no rebuild/replacement, and independence.
+RAID 0 loss probability (any disk fails): 0.1141576191 (11.4158%)
+RAID 1 loss probability (all 6 mirror copies fail): 6.4e-11 (6.4e-09%)
+RAID 5 loss probability (2 or more disks fail): 0.00568712352 (0.568712%)
+RAID 10 loss probability (any mirror pair loses both): 0.001199520064 (0.119952%)
+
+For the assignment's six 4-TB disks, RAID 6 capacity is 16 TB and it tolerates any two disk failures.
+RAID 6 write work is higher than RAID 5 because two parity values must be calculated and written.

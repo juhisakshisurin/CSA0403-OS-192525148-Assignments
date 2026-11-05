@@ -1,0 +1,51 @@
+Assignment 3 – Task 6: Disk Management Evidence Worksheet
+
+A. LINUX SYSTEM
+Distribution/version:
+Kernel:
+Linux environment (physical Linux / WSL / VM):
+Command: uname -a
+
+B. PARTITIONS AND SWAP
+lsblk output:
+[Paste or attach disk_evidence/disk_layout.txt]
+
+fdisk -l output:
+[Paste or attach disk_evidence/fdisk_output.txt]
+
+Active swap:
+[Paste or attach swapon --show output]
+
+C. RAID CAPACITY – 6 DISKS × 4 TB
+RAID 0:
+RAID 1 (six-way mirror):
+RAID 5:
+RAID 10:
+RAID 6 alternative:
+
+D. FAILURE PROBABILITY
+Per-disk failure probability p:
+Assessment interval:
+RAID 1 simplified data-loss probability:
+RAID 5 simplified data-loss probability:
+Assumptions (independence, no rebuild, etc.):
+
+E. STORAGE READ SPEED
+Test file size:
+Block size:
+I/O mode (direct or buffered):
+SSD mount point:
+SSD read speed:
+HDD mount point:
+HDD read speed:
+Was the comparison performed under the same conditions?
+
+F. ENGINEERING DECISION
+Selected RAID level:
+Reason:
+Swap size:
+Swap location:
+Reason for swap-file or swap-partition choice:
+RAID 6 alternative assessment:
+
+Note: The question paper does not provide a numeric disk-failure probability. State and justify the value used. Never invent partition, swap, SSD or HDD measurements.
