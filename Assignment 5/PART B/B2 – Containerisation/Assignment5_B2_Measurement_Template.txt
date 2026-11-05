@@ -1,0 +1,60 @@
+B2 EXPERIMENTAL EVIDENCE - FILL WITH YOUR OWN RESULTS
+
+Environment
+OS / Distribution:
+Kernel:
+Docker Engine version:
+Docker Compose version:
+CPU:
+RAM:
+Storage:
+Build date/time:
+
+A. Build and standalone run
+Command:
+Build output / errors:
+Image tag:
+Image size (docker images):
+Container ID:
+docker ps status:
+URL test result:
+docker exec ... whoami result:
+
+B. Resource limits
+docker run command:
+--cpus value:
+--memory value:
+docker stats CPU %:
+docker stats memory usage / limit:
+Observe behaviour while sending requests:
+
+C. Docker Compose
+docker compose ps:
+Portal container state:
+Database container state:
+Database volume name:
+Persistence check after docker compose down (without -v) and up:
+
+D. Image layer and size comparison
+Image tag | Image size | Number/history of layers | Build duration | Pull duration
+result-portal:latest |
+result-portal:multistage |
+result-portal:ubuntu |
+
+E. Security/package scan (if performed)
+Scanner and version:
+Image scanned:
+Critical:
+High:
+Medium:
+Packages with findings:
+Do not invent scan findings. Include scanner output or explain why scanning was not performed.
+
+F. Interpretation
+- Which image was smallest?
+- Which build completed fastest?
+- Which image pulled fastest over the measured network?
+- What impact does a smaller base image have on package/CVE exposure?
+- What does docker history show about image layers and cached dependency installation?
+- Does the non-root user check return "portal"?
+- Explain CPU and memory limit effect based on actual docker stats.

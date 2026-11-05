@@ -1,0 +1,50 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: result-portal-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?Set POSTGRES_DB in .env}
+      POSTGRES_USER: ${POSTGRES_USER:?Set POSTGRES_USER in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    cpus: "1.00"
+    mem_limit: 1g
+    networks:
+      - portal_net
+
+  portal:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: result-portal:compose
+    container_name: result-portal
+    restart: unless-stopped
+    environment:
+      DATABASE_HOST: db
+      DATABASE_PORT: "5432"
+      DATABASE_NAME: ${POSTGRES_DB:?Set POSTGRES_DB in .env}
+      DATABASE_USER: ${POSTGRES_USER:?Set POSTGRES_USER in .env}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    cpus: "0.50"
+    mem_limit: 512m
+    networks:
+      - portal_net
+
+volumes:
+  postgres_data:
+
+networks:
+  portal_net:
+    driver: bridge
