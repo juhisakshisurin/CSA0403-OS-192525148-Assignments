@@ -1,0 +1,12 @@
+Task 4 – IPC Transfer Measurements
+Enter results from your own Ubuntu/WSL run of ./run_task4.sh.
+Time values are medians of 3 trials as printed by ipc_benchmark.c.
+Sizes are MiB (1 MiB = 1,048,576 bytes).
+
+| Size | Pipe median (ms) | Shared-memory median (ms) | Pipe checksum | Shared-memory checksum |
+|---|---:|---:|---|---|
+| 1 MiB | | | PASS | PASS |
+| 10 MiB | | | PASS | PASS |
+| 100 MiB | | | PASS | PASS |
+
+Do not enter benchmark timings from another computer as your own.
