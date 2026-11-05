@@ -1,0 +1,6 @@
+Deployment,Startup time seconds,Memory used MB,Image or disk size MB,Requests per second,Mean latency ms,95th percentile latency ms,Notes
+Bare metal Linux,,,,,,, 
+VirtualBox or KVM VM,,,,,,, 
+Docker container,,,,,,, 
+Kubernetes 3 replicas,,,,,,, 
+Kubernetes 6 replicas under load,,,,,,, 

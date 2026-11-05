@@ -1,0 +1,62 @@
+B3.2 MEASUREMENT NOTES - ENTER ACTUAL OBSERVATIONS
+
+Machine / environment:
+CPU model and cores:
+Physical RAM:
+Linux distribution and version:
+Kernel:
+Docker Engine version:
+VirtualBox/KVM version:
+Kubernetes: kind/minikube and version:
+Benchmark client: ApacheBench version (`ab -V`):
+Date and time:
+Other background workloads stopped? Yes / No
+
+Keep the experiment comparable:
+- Use the same app.py and requirements.txt across bare metal, VM and Docker.
+- Use the same Gunicorn worker count (2) and port/health route.
+- Use the same guest vCPU/RAM allocation and record it.
+- Use the same request path (/work?n=10000), request count and concurrency.
+- Run each throughput test at least three times; report the median.
+- Warm the app with a few requests before recording throughput.
+- Keep the benchmark client outside the deployment being measured.
+- Record whether Docker image/layers were already cached.
+- Do not compare a warm VM boot with a cold container start without saying so.
+
+STARTUP
+Start from a stopped process/container/VM. Time until /health returns HTTP 200.
+For VM startup, power off the VM before each run and include guest boot + systemd service readiness.
+Repeat 3 times; report median.
+
+MEMORY
+Bare metal: record `ps -o rss= -p <gunicorn-pid>` and `free -h`.
+VM: record guest `free -h`, configured guest RAM, and host VirtualBox/QEMU process RSS.
+Docker: record `docker stats --no-stream`; record `docker inspect --size` if needed.
+Kubernetes: record `kubectl top pods` and `kubectl top nodes` if metrics-server is installed.
+
+SIZE
+Bare metal: `du -sh .venv app.py` (report app + virtualenv footprint).
+VM: record configured virtual disk maximum and actual host file size (`du -h <disk-file>`).
+Docker: `docker image ls simats/result-portal:1.0`.
+Kubernetes: it runs the same image; record Pod count and image ID, not an extra copy per Pod.
+
+THROUGHPUT
+Install `apache2-utils`; use:
+  ab -n 2000 -c 20 -k http://TARGET:PORT/work?n=10000
+Record Requests per second, mean latency and 95th percentile.
+Do not run multiple deployment benchmarks simultaneously on the same constrained host.
+
+KUBERNETES
+Before deleting a Pod:
+  kubectl get pods -l app=result-portal
+Record old Pod name.
+Delete one Pod:
+  kubectl delete pod POD_NAME
+Record the replacement Pod name and time until 3 ready Pods exist.
+Scale while requests are running:
+  kubectl scale deployment/result-portal --replicas=6
+Record the time until six Pods are Ready and the Requests/sec during the test.
+
+LIMITATIONS
+A one-node kind/minikube cluster demonstrates Pod replacement and replica scaling, but it does not prove multi-node high availability. To test node failure recovery, use a multi-node cluster and delete/stop a worker node.
+WSL2 itself runs inside a lightweight VM. A process run directly inside WSL2 is not bare-metal Linux. Label it as "direct Linux/WSL2" unless the experiment is performed on a native Linux host.
