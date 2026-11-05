@@ -1,0 +1,47 @@
+ASSIGNMENT 5 - PART A - A1
+OPTIONAL LINUX EVIDENCE COMMANDS
+
+Kernel and distribution
+uname -a
+cat /etc/os-release
+
+CPU and process scheduling observation
+lscpu
+uptime
+ps -eo pid,ppid,ni,pri,stat,pcpu,pmem,comm --sort=-pcpu | head -n 25
+top
+
+Memory, page cache and swapping
+free -h
+cat /proc/meminfo
+swapon --show
+vmstat 1 5
+cat /proc/pressure/memory
+
+/proc process-level information
+cat /proc/self/status
+cat /proc/loadavg
+cat /proc/stat
+cat /proc/filesystems
+
+/sys device and driver hierarchy
+ls /sys/class/net
+ls /sys/block
+cat /sys/block/<device>/queue/scheduler
+
+VFS, mounted filesystems and permissions
+findmnt -T /
+df -hT
+lsblk -o NAME,TYPE,SIZE,FSTYPE,MOUNTPOINTS
+ls -ld / /etc /home /usr /var /tmp /dev /proc /sys
+id
+umask
+stat -c '%A %a %U:%G %n' /etc/passwd /tmp
+
+Run the supplied collector:
+chmod +x a1_linux_evidence.sh
+./a1_linux_evidence.sh
+
+The output is saved as a1_linux_evidence.txt.
+These commands are for observation. Do not write arbitrary values into /proc/sys or /sys.
+Some /sys scheduler attributes may not appear for virtual/WSL storage.
