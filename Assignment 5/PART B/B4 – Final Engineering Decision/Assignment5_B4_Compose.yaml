@@ -1,0 +1,22 @@
+services:
+  result-portal:
+    build:
+      context: ./portal
+    image: university/result-portal:b4
+    container_name: b4-result-portal
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    cpus: "0.50"
+    mem_limit: 512m
+
+  lms-exam:
+    build:
+      context: ./lms_exam
+    image: university/lms-exam:b4
+    container_name: b4-lms-exam
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
+    cpus: "0.40"
+    mem_limit: 512m

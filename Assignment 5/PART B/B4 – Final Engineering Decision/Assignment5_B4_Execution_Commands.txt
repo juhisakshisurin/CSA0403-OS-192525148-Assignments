@@ -1,0 +1,63 @@
+ASSIGNMENT 5 - PART B - B4 EXECUTION COMMANDS
+
+A. Build both images
+docker build -t university/result-portal:b4 ./portal
+docker build -t university/lms-exam:b4 ./lms_exam
+
+B. Load images into a local KIND cluster
+kind create cluster --name b4
+kind load docker-image university/result-portal:b4 --name b4
+kind load docker-image university/lms-exam:b4 --name b4
+
+(For minikube, use: minikube start
+ minikube image load university/result-portal:b4
+ minikube image load university/lms-exam:b4)
+
+C. Deploy both services with their own resource limits
+kubectl apply -f kubernetes/b4-services.yaml
+kubectl get deployments,pods,services -n b4-university
+kubectl describe deployment result-portal -n b4-university
+kubectl describe deployment lms-exam -n b4-university
+
+D. Test both endpoints in separate terminals
+kubectl port-forward -n b4-university service/result-portal 8000:80
+curl http://127.0.0.1:8000/health
+curl 'http://127.0.0.1:8000/work?n=10000'
+
+kubectl port-forward -n b4-university service/lms-exam 8001:80
+curl http://127.0.0.1:8001/health
+curl http://127.0.0.1:8001/exam/status
+
+E. Collect resource evidence
+kubectl get pods -n b4-university -o wide
+kubectl describe pods -n b4-university
+kubectl top pods -n b4-university
+kubectl get resourcequota -n b4-university
+
+kubectl top requires Metrics API (commonly metrics-server). If unavailable, retain
+kubectl describe output to prove requests and limits and note the metrics limitation.
+
+F. Capacity estimate using ACTUAL B3 per-container throughput
+python3 scripts/b4_capacity_estimator.py --measured-rps YOUR_B3_MEASURED_RPS
+
+Example only:
+python3 scripts/b4_capacity_estimator.py --measured-rps 40 \
+  --requests-per-login 5 --burst-factor 2 --headroom 1.25
+
+G. Apply the calculated replica count (replace 7 with estimator output)
+kubectl scale deployment/result-portal -n b4-university --replicas=7
+kubectl get pods -n b4-university -w
+
+H. Docker Compose alternative (single host)
+docker compose up --build -d
+docker compose ps
+docker compose stats
+
+This sample Compose file starts one instance of each service on separate host ports.
+To scale a Compose service, remove its fixed host-port publishing and put a reverse
+proxy/load balancer in front of the replicas. Compose scaling on one machine does
+not provide multi-node scheduling or cross-server recovery.
+
+I. Optional cleanup
+kubectl delete namespace b4-university
+docker compose down

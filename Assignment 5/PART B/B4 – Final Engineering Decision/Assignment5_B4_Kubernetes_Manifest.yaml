@@ -1,0 +1,133 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: b4-university
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: result-portal
+  namespace: b4-university
+  labels:
+    app: result-portal
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: result-portal
+  template:
+    metadata:
+      labels:
+        app: result-portal
+    spec:
+      containers:
+        - name: portal
+          image: university/result-portal:b4
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8000
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 5
+            timeoutSeconds: 2
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: result-portal
+  namespace: b4-university
+spec:
+  type: ClusterIP
+  selector:
+    app: result-portal
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lms-exam
+  namespace: b4-university
+  labels:
+    app: lms-exam
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: lms-exam
+  template:
+    metadata:
+      labels:
+        app: lms-exam
+    spec:
+      containers:
+        - name: lms-exam
+          image: university/lms-exam:b4
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8001
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+            limits:
+              cpu: "400m"
+              memory: "512Mi"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 5
+            timeoutSeconds: 2
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lms-exam
+  namespace: b4-university
+spec:
+  type: ClusterIP
+  selector:
+    app: lms-exam
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8001
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: university-workloads
+  namespace: b4-university
+spec:
+  hard:
+    requests.cpu: "4"
+    requests.memory: 5Gi
+    limits.cpu: "8"
+    limits.memory: 10Gi
+    pods: "15"

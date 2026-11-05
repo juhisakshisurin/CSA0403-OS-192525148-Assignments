@@ -1,0 +1,124 @@
+ASSIGNMENT 5 - PART B - B4
+CAPACITY AND ANNUAL COST WORKSHEET
+
+PART 1 - INPUTS FROM B3 MEASUREMENTS
+Measured sustainable requests/sec per ONE portal container (R):
+B3 benchmark endpoint/path:
+B3 request count / concurrency:
+p95 latency at measured R:
+Error rate at measured R:
+Does the measured R satisfy the intended response-time target? Yes / No
+
+PART 2 - TRAFFIC ASSUMPTIONS
+Students = 150,000
+Login window = 2 hours = 7,200 seconds
+Average login arrival = 150,000 / 7,200 = 20.83 logins/second
+
+Average backend requests per login (q): ______
+Peak-to-average burst factor (b): ______
+Capacity headroom factor (h): ______
+
+Average backend RPS = 20.83 * q
+Peak planning RPS = 20.83 * q * b
+Design RPS = 20.83 * q * b * h
+Required portal replicas = CEILING(Design RPS / R)
+
+Worked example ONLY (not a measured result):
+q = 5 requests/login, b = 2.0, h = 1.25
+Design RPS = 20.83 * 5 * 2.0 * 1.25 = 260.42 RPS
+If B3 measured R = 40 RPS per container:
+Required replicas = CEILING(260.42 / 40) = 7 containers.
+For the B4 portal request 250m CPU and 256Mi RAM per replica:
+7 replicas request 1.75 vCPU and 1,792Mi (1.75Gi) RAM.
+At the 500m CPU / 512Mi limit per replica:
+7 replicas have a total ceiling of 3.5 vCPU and 3.5Gi RAM.
+This example is illustrative and must be recalculated using the student's actual B3 RPS.
+
+PART 3 - TOTAL B4 RESOURCE REQUESTS
+Portal:
+  replicas = ______
+  CPU request/replica = 250m
+  Memory request/replica = 256Mi
+LMS/exam second service:
+  replicas = 2
+  CPU request/replica = 200m
+  Memory request/replica = 256Mi
+
+Combined request CPU = (portal replicas * 0.25) + (2 * 0.20) vCPU
+Combined request memory = (portal replicas * 256) + (2 * 256) MiB
+
+Combined CPU limit = (portal replicas * 0.50) + (2 * 0.40) vCPU
+Combined memory limit = (portal replicas * 512) + (2 * 512) MiB
+
+PART 4 - PUBLIC-CLOUD-ONLY ANNUAL COST MODEL
+One result day per semester = 2 high-traffic days per year.
+Peak traffic window = 2 hours per result day = 4 peak hours/year.
+Keep baseline capacity online all year; only add the peak capacity for four event hours
+in this simplified model. Include pre-warming hours if your operational plan needs them.
+
+Record provider:
+Region:
+Currency:
+Price date:
+Baseline worker nodes (N_base):
+Peak worker nodes (N_peak):
+Hourly price per worker node (P_node):
+Kubernetes control-plane hourly fee (P_control):
+Managed database hourly charge (P_db):
+Load balancer hourly charge (P_lb):
+Persistent storage GB-month and rate:
+Backup GB-month and rate:
+Network egress GB and rate:
+Logging/monitoring monthly rate:
+Support/subscription yearly charge:
+Tax / currency adjustment:
+
+Cloud baseline annual fixed services =
+8,760 * (N_base*P_node + P_control + P_db + P_lb)
+
+Peak burst compute annual =
+(2 result days * 2 peak hours) * (N_peak - N_base) * P_node
+= 4 * (N_peak - N_base) * P_node
+
+Storage annual = 12 * storage_GB_month * storage_rate_per_GB_month
+Backup annual = 12 * backup_GB_month * backup_rate_per_GB_month
+Network annual = egress_GB_per_year * egress_rate_per_GB
+Annual public-cloud total =
+baseline annual + peak burst compute + storage + backup + network
++ monitoring + support + taxes.
+
+Do not omit a continuously provisioned DB, control plane or load balancer from the 8,760-hour term.
+If pricing is by node and not by Pod, calculate N_base and N_peak from measured CPU/RAM
+requests and node allocatable capacity rather than treating one Pod as one VM.
+
+PART 5 - PRODUCTION OPTION COMPARISON
+Own servers + VMs:
+- Existing host capacity and VM overhead; staff/maintenance/power/cooling.
+- Does not require new servers if capacity is adequate, but peak headroom may be insufficient.
+
+Own servers + containers/Kubernetes:
+- Uses current hardware more densely; replicas and resource limits isolate workloads.
+- Capacity remains bounded by the existing node CPU/RAM and failure reserve.
+
+Public cloud only:
+- Elastic node capacity, hourly billing and provider-managed services.
+- Recurring baseline DB/control-plane/network/storage costs; provider hosts infrastructure.
+
+Hybrid (recommended planning option):
+- Run baseline workloads on current university infrastructure.
+- Burst stateless app replicas to the cloud before result day.
+- Use private connectivity and a controlled database access/replication strategy.
+- University retains data ownership and access policy; cloud provider operates contracted infrastructure.
+
+PART 6 - DECISION DATA TO COMPLETE
+Estimated peak portal replicas:
+Estimated combined CPU request:
+Estimated combined RAM request:
+Annual public-cloud cost (provider quote):
+Annual existing-infrastructure operating cost:
+Hybrid annual incremental cloud burst cost:
+Capacity addition time measured:
+Data region:
+Encryption/key owner:
+Who can administer data:
+Final decision and evidence:
