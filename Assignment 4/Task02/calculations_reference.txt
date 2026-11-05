@@ -1,0 +1,86 @@
+ASSIGNMENT 4 – TASK 2 CALCULATION SUMMARY
+
+UNIT CONVENTION
+1 KB = 2^10 bytes
+1 GB = 2^30 bytes
+1 TB = 2^40 bytes
+Block size = 4 KB = 2^12 bytes
+Block address / pointer size = 4 bytes
+
+1. NUMBER OF BLOCKS IN A 4 GB FILE
+4 × 2^30 / 2^12 = 2^20 = 1,048,576 blocks.
+
+2. DISK READS TO REACH THE LAST DATA BLOCK
+Contiguous:
+- File metadata provides the starting block and length.
+- Last-block address is calculated arithmetically.
+- One read of the target data block (metadata assumed available).
+
+Basic linked allocation:
+- Each block contains the pointer to its successor.
+- Follow the chain from block 1 to block 1,048,576.
+- Under the stated read-count convention (each traversed block read once, including final data block): 1,048,576 block reads.
+
+FAT held in memory:
+- 1,048,575 in-memory FAT chain lookups, then one target data-block read.
+- O(k) RAM lookups plus the final data read; not O(1) direct access.
+
+Indexed allocation:
+- One 4 KB index block stores 4,096 / 4 = 1,024 pointers.
+- A 4 GB file has 1,048,576 data blocks, requiring 1,024 leaf index blocks.
+- Two index levels are needed: root index -> leaf index -> data.
+- Cold access: root index read + leaf index read + data block read = 3 reads.
+- If the root index is cached: 2 reads.
+- A single-index-block answer of 2 reads would not support all pointers for a 4 GB file under these block/address assumptions.
+
+3. MAXIMUM FILE SIZE OF THE GIVEN INODE
+Pointers per indirect block = 4,096 / 4 = 1,024.
+
+Direct data blocks = 12
+Single indirect = 1,024
+Double indirect = 1,024^2 = 1,048,576
+Triple indirect = 1,024^3 = 1,073,741,824
+
+Total data blocks:
+12 + 1,024 + 1,048,576 + 1,073,741,824
+= 1,074,791,436 blocks.
+
+Maximum bytes:
+1,074,791,436 × 4,096
+= 4,402,345,721,856 bytes
+= approximately 4.00391 TiB.
+
+4. BIT VECTOR FOR A 4 TB DISK
+Using binary units:
+4 TB (treated as 4 TiB) = 4 × 2^40 bytes.
+Number of 4-KB blocks = 2^42 / 2^12 = 2^30 = 1,073,741,824 blocks.
+One bit per block = 2^30 bits.
+Bit-vector bytes = 2^30 / 8 = 2^27 = 134,217,728 bytes = 128 MiB.
+
+Decimal-unit alternative:
+4,000,000,000,000 / 4,096 = 976,562,500 blocks.
+Bitmap = 976,562,500 / 8 = 122,070,312.5 bytes, rounded up to 122,070,313 bytes (about 116.4 MiB).
+
+5. FAT MEMORY FOR A 4 TB DISK
+With one 4-byte FAT entry per 4-KB block:
+2^30 entries × 4 bytes = 2^32 bytes = 4 GiB.
+
+6. 32-BLOCK PROGRAM STATE
+Initial allocations: A=6 blocks, B=8, C=5, D=7.
+After releasing B and D:
+AAAAAA........CCCCC.............
+Free blocks: 6–13 (8 blocks) and 19–31 (13 blocks) = 21 free blocks.
+
+First-fit contiguous allocation of E(10):
+First run of at least 10 is blocks 19–28; start = 19.
+
+Subsequent indexed allocation of E(10):
+Index block = 6.
+Data blocks = 7, 8, 9, 10, 11, 12, 13, 29, 30, 31.
+
+Final display:
+AAAAAAeEEEEEEECCCCCEEEEEEEEEEEEE
+
+IMPORTANT CLARIFICATION
+In the supplied code's order, contiguous allocation of E(10) succeeds at block 19.
+Thus the accompanying prompt sentence asking why E cannot be contiguous despite 21 free blocks does not match the program's actual initial free-space arrangement and expected output. The code/output should be followed exactly: a 13-block contiguous run exists (blocks 19–31). The later indexed allocation consumes the remaining scattered free blocks.
