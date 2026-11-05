@@ -1,0 +1,44 @@
+=== Block devices ===
+NAME  TYPE ROTA MODEL  SIZE
+vda   disk    1         32G
+pmem0 disk    0       25.5G
+
+
+=== Scheduler for loop0 ===
+[none] 
+rotational=0
+
+=== Scheduler for loop1 ===
+[none] 
+rotational=0
+
+=== Scheduler for loop2 ===
+[none] 
+rotational=0
+
+=== Scheduler for loop3 ===
+[none] 
+rotational=0
+
+=== Scheduler for loop4 ===
+[none] 
+rotational=0
+
+=== Scheduler for loop5 ===
+[none] 
+rotational=0
+
+=== Scheduler for loop6 ===
+[none] 
+rotational=0
+
+=== Scheduler for loop7 ===
+[none] 
+rotational=0
+
+=== Scheduler for vda ===
+[none] 
+rotational=1
+
+The scheduler in square brackets is the active scheduler.
+This script is read-only; it does not change the scheduler.

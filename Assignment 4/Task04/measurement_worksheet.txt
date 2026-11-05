@@ -1,0 +1,50 @@
+ASSIGNMENT 4 - TASK 4: LOCAL EVIDENCE WORKSHEET
+
+STUDENT DETAILS
+Name: Juhi Surin
+Register Number: 192525148
+Course: CSA0403 Operating Systems
+
+A. ENVIRONMENT
+GCC version:
+Linux distribution and version:
+Kernel:
+Disk device name:
+Device model:
+ROTA value:
+Disk type (HDD / SSD / NVMe / virtual):
+Scheduler output:
+Active scheduler shown in square brackets:
+
+B. GIVEN QUEUE CALCULATIONS
+Initial head: 53
+Request queue: 98, 183, 37, 122, 14, 124, 65, 67
+FCFS total:
+SSTF total:
+SCAN total:
+C-SCAN service-path subtotal:
+C-SCAN circular jump:
+C-SCAN total including jump:
+LOOK total:
+C-LOOK total including jump:
+
+C. 10,000-REQUEST SIMULATION
+Light load output file: simulation_output.txt
+Medium load output file: simulation_output.txt
+Heavy load output file: simulation_output.txt
+Generated CSV: scheduler_simulation.csv
+State the simulation assumptions from README/report when quoting results.
+
+D. SSTF STARVATION
+Near request stream:
+Far request cylinder:
+Observed / simulated far-request wait:
+Explanation:
+
+E. SCREENSHOTS
+[ ] Completed SSTF program output
+[ ] 10,000-request simulation output
+[ ] lsblk device list
+[ ] /sys/block/<device>/queue/scheduler output
+
+Do not claim the preparation environment's virtual device output as the scheduler of your own laptop's physical SSD.

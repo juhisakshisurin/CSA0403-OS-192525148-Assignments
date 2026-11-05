@@ -1,0 +1,44 @@
+ASSIGNMENT 4 - TASK 4: SAMPLE CALCULATIONS
+Disk cylinders: 0 to 199
+Initial head: 53
+Queue: 98, 183, 37, 122, 14, 124, 65, 67
+
+1) FCFS
+Order: 53 -> 98 -> 183 -> 37 -> 122 -> 14 -> 124 -> 65 -> 67
+Movement: 45 + 85 + 146 + 85 + 108 + 110 + 59 + 2 = 640 cylinders.
+
+2) SSTF
+Order: 53 -> 65 -> 67 -> 37 -> 14 -> 98 -> 122 -> 124 -> 183
+Movement: 12 + 2 + 30 + 23 + 84 + 24 + 2 + 59 = 236 cylinders.
+
+3) SCAN (initial direction toward cylinder 0)
+Order: 53 -> 37 -> 14 -> 0 -> 65 -> 67 -> 98 -> 122 -> 124 -> 183
+Movement: 16 + 23 + 14 + 65 + 2 + 31 + 24 + 2 + 59 = 236 cylinders.
+
+4) C-SCAN (initial direction upward, toward 199)
+Service path: 53 -> 65 -> 67 -> 98 -> 122 -> 124 -> 183 -> 199
+Service-path movement: 12 + 2 + 31 + 24 + 2 + 59 + 16 = 146.
+Wrap: 199 -> 0 = 199 cylinders.
+After wrap: 0 -> 14 -> 37 = 37.
+The supplied program prints 146 + 37 = 183 cylinders and reports the 199-cylinder wrap separately.
+Full physical movement including wrap = 183 + 199 = 382 cylinders.
+
+5) LOOK (initial direction toward cylinder 0)
+Order: 53 -> 37 -> 14 -> 65 -> 67 -> 98 -> 122 -> 124 -> 183
+Movement: 16 + 23 + 51 + 2 + 31 + 24 + 2 + 59 = 208 cylinders.
+
+6) C-LOOK (initial direction upward)
+Order: 53 -> 65 -> 67 -> 98 -> 122 -> 124 -> 183 -> (jump) 14 -> 37
+Movement: 12 + 2 + 31 + 24 + 2 + 59 + 169 + 23 = 322 cylinders.
+The 169-cylinder circular jump from 183 to 14 is counted as physical travel.
+
+SSTF STARVATION DEMONSTRATION
+One request at cylinder 183 arrives at time 0. One thousand requests at cylinders 59, 60, and 61 arrive every 1 ms. Under the stated illustrative service model, SSTF chooses the nearer request at each dispatch and serves all 1,000 near requests before cylinder 183. The finite-stream wait reported by the simulator is 1,201.320 ms. An indefinitely continuing near stream can starve the request at cylinder 183.
+
+SIMULATION MODEL
+10,000 requests per load; cylinders uniform over 0..199.
+Arrival intervals uniform from 0.5 to 1.5 times the mean.
+Light/medium/heavy mean arrival intervals: 8.0 / 2.0 / 0.6 ms.
+Request service time: 0.20 + 0.020 * head movement (ms).
+Waiting time: dispatch start time minus arrival time.
+All results are simulation measurements under this explicit model, not physical disk measurements.

@@ -1,0 +1,41 @@
+Disk scheduling simulation assumptions:
+- Cylinders: 0..199; initial head: 53.
+- 10,000 random requests per load; uniform cylinder selection.
+- Arrival intervals are uniform in [0.5, 1.5] x the stated mean.
+- Light/medium/heavy mean inter-arrival: 8.0 / 2.0 / 0.6 ms.
+- Modelled service time: 0.20 + 0.020 x head movement (ms).
+- Waiting time = dispatch start time - request arrival time.
+- Average movement includes SCAN/C-SCAN/C-LOOK travel and wrap movement.
+
+=== Light load: mean inter-arrival 8.00 ms, 10000 requests ===
+FCFS    avg_head_movement=  66.257 cylinders/request avg_wait=     0.000 ms max_wait=       0.001 ms
+SSTF    avg_head_movement=  66.257 cylinders/request avg_wait=     0.000 ms max_wait=       0.001 ms
+SCAN    avg_head_movement= 132.696 cylinders/request avg_wait=     0.699 ms max_wait=       3.860 ms
+C-SCAN  avg_head_movement= 189.803 cylinders/request avg_wait=     2.764 ms max_wait=       9.962 ms
+LOOK    avg_head_movement=  66.257 cylinders/request avg_wait=     0.000 ms max_wait=       0.001 ms
+C-LOOK  avg_head_movement=  66.257 cylinders/request avg_wait=     0.663 ms max_wait=       3.960 ms
+
+=== Medium load: mean inter-arrival 2.00 ms, 10000 requests ===
+FCFS    avg_head_movement=  66.758 cylinders/request avg_wait=     0.936 ms max_wait=      10.851 ms
+SSTF    avg_head_movement=  64.334 cylinders/request avg_wait=     0.551 ms max_wait=       7.489 ms
+SCAN    avg_head_movement=  85.527 cylinders/request avg_wait=     2.328 ms max_wait=       8.558 ms
+C-SCAN  avg_head_movement=  88.130 cylinders/request avg_wait=     4.247 ms max_wait=      11.207 ms
+LOOK    avg_head_movement=  64.392 cylinders/request avg_wait=     0.560 ms max_wait=       7.309 ms
+C-LOOK  avg_head_movement=  65.540 cylinders/request avg_wait=     1.356 ms max_wait=      10.464 ms
+
+=== Heavy load: mean inter-arrival 0.60 ms, 10000 requests ===
+FCFS    avg_head_movement=  66.552 cylinders/request avg_wait=  4672.836 ms max_wait=    9305.147 ms
+SSTF    avg_head_movement=  20.041 cylinders/request avg_wait=     3.798 ms max_wait=      27.960 ms
+SCAN    avg_head_movement=  20.056 cylinders/request avg_wait=     4.020 ms max_wait=      12.721 ms
+C-SCAN  avg_head_movement=  20.067 cylinders/request avg_wait=     5.873 ms max_wait=      14.171 ms
+LOOK    avg_head_movement=  20.042 cylinders/request avg_wait=     3.669 ms max_wait=      12.091 ms
+C-LOOK  avg_head_movement=  20.053 cylinders/request avg_wait=     5.401 ms max_wait=      15.414 ms
+
+SSTF near-stream fairness demonstration:
+- 1000 requests at cylinders 59/60/61 arrive every 1 ms.
+- A request at cylinder 183 is waiting from time 0.
+- SSTF serves all 1000 nearer requests before cylinder 183.
+- Modelled wait for cylinder 183: 1201.320 ms (finite stream).
+- If the closer stream continues indefinitely, the far request can starve.
+
+Saved scheduler_simulation.csv.
