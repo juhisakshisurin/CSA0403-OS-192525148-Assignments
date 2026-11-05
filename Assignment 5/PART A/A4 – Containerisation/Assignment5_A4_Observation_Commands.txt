@@ -1,0 +1,46 @@
+ASSIGNMENT 5 - PART A - A4
+OPTIONAL CONTAINER OBSERVATION COMMANDS
+
+1. Record the Linux and Docker environment
+cat /etc/os-release
+uname -r
+docker --version
+docker version
+
+2. List containers and images
+docker ps -a
+docker images
+
+3. Inspect a running container (replace CONTAINER_NAME)
+docker inspect CONTAINER_NAME
+docker stats --no-stream CONTAINER_NAME
+docker top CONTAINER_NAME
+docker exec CONTAINER_NAME sh -c 'readlink /proc/self/ns/pid; readlink /proc/self/ns/net; readlink /proc/self/ns/mnt; cat /proc/self/cgroup'
+
+4. Inspect the image layer history (replace IMAGE_NAME)
+docker history IMAGE_NAME
+docker image inspect IMAGE_NAME
+
+5. Inspect cgroup v2 visibility inside a container
+docker exec CONTAINER_NAME sh -c 'cat /proc/self/cgroup; ls -la /sys/fs/cgroup 2>/dev/null'
+
+6. Optional demonstration of a separate process/network namespace
+docker run --rm alpine:3.20 sh -c '
+  echo "Container PID namespace:"
+  readlink /proc/self/ns/pid
+  echo "Container network namespace:"
+  readlink /proc/self/ns/net
+  echo "Cgroup membership:"
+  cat /proc/self/cgroup
+'
+
+INTERPRETATION
+- Different namespace links indicate isolated namespace instances.
+- /proc/self/cgroup shows the process cgroup membership. The exact path depends on the runtime and cgroup version.
+- docker stats reports container CPU, memory, network and block-I/O counters.
+- docker history shows the image build history; some metadata instructions do not add filesystem bytes.
+- A volume should be used for database data that must persist beyond container removal.
+
+SAFETY
+These are optional observation commands. They do not require privileged containers or changes to kernel settings.
+The alpine command may download the image if it is not already present; this requires a working Docker daemon and network access.
