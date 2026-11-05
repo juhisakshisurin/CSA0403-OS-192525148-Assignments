@@ -1,0 +1,9 @@
+# Task 3 execution output (fill after running the benchmark)
+# Configuration | Median time (ms) | Speed-up
+Sequential | | 1.000x
+One thread per camera (64) | |
+Worker pool (4) | |
+Worker pool (8) | |
+Worker pool (16) | |
+
+# Include the full terminal output in benchmark_results.txt.

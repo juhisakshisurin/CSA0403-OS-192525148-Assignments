@@ -1,0 +1,9 @@
+Run these commands in Ubuntu/WSL and save the output with your submission:
+
+gcc --version
+lsb_release -a
+uname -r
+nproc
+lscpu
+
+Do not copy environment details from another machine.
