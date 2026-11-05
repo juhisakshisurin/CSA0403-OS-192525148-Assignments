@@ -1,0 +1,47 @@
+ASSIGNMENT 4 – TASK 1
+PROPOSED FILE-SYSTEM ORGANISATION
+
+/college-files/
+|
++-- students/
+|   +-- <cohort>/
+|       +-- <department>/
+|           +-- <student-id>/
+|               +-- assignments/
+|               +-- notes/
+|               +-- submissions/
+|               +-- projects/
+|
++-- projects/
+|   +-- <project-id>/
+|       +-- shared/
+|       +-- deliverables/
+|       +-- references/
+|
++-- courses/
+|   +-- <course-code>/
+|       +-- resources/
+|
++-- administration/
+    +-- policies/
+    +-- backup-catalog/
+
+ACCESS POLICY
+- Personal student directory: owner-only directory permissions (0700).
+- Personal files: owner read/write permissions (0600).
+- Project folders: project-specific ACL group grants read/write.
+- Administration paths: restricted to authorised staff/service accounts.
+- Student project folders contain a symbolic link to the canonical shared
+  project folder; the shared target's ACL is still enforced.
+
+FILE-NAMING PATTERN
+<course-code>_<academic-year>_<assignment-or-topic>_<description>_vNN.<ext>
+
+EXAMPLE
+CSA0403_2026-27_A4_Task01_FileSystemReview_v01.pdf
+
+IMPORTANT ATTRIBUTES
+Owner, group, size, file type, timestamps, permission bits, ACL entries,
+inode/file identifier, checksum, version and backup-retention metadata.
+
+TASK 1 IS A DESIGN TASK. NO C PROGRAM OR COMPILATION COMMAND IS REQUIRED.
