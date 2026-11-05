@@ -1,0 +1,6 @@
+Control-loop memory test: 4 MiB, native page size=4096 bytes
+Unlocked case discards pages before each pass to induce demand faults.
+Locked case calls mlock() and prefaults pages before measurement.
+Reported maximum is an observed per-page-touch latency, not a hard-real-time WCET guarantee.
+UNLOCKED bytes=4194304 pages=1024 accesses=3072 avg_touch=1491.0 ns max_observed_touch=134722 ns minor_faults=6144 major_faults=0
+LOCKED   bytes=4194304 pages=1024 accesses=3072 avg_touch=22.2 ns max_observed_touch=31 ns minor_faults=0 major_faults=0

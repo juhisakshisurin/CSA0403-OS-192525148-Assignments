@@ -1,0 +1,24 @@
+2 GiB edge-device memory budget (abstract 16 MiB units)
+OS/kernel/services :  320 MiB
+Real-time locked   :   64 MiB
+Machine-learning  : 1536 MiB
+Logging working set:   64 MiB
+Safety headroom    :   64 MiB
+Total planned      : 2048 MiB / 2048 MiB
+
+Page-replacement simulation (each model page = 16 MiB).
+The simulator uses per-task LRU frame allocations.
+The real-time pages are preloaded/pinned before the measured run.
+Real-time control    working-set=  64 MiB frames=  4 initial_prefaults=  4 runtime_page_faults=  0
+Machine-learning     working-set=1536 MiB frames= 96 simulated_demand_faults=  96
+Logging              working-set=  64 MiB frames=  4 simulated_demand_faults=   4
+
+Verification:
+PASS: real-time task has zero page faults during the simulated control phase.
+ML task faults only on first touch; its active model working set fits in its allocated frames.
+Logger ring buffer faults only on initial fill; subsequent reuse is resident.
+
+Fourth-task admission check:
+Adding fourth task: 500 MiB -> planned total 2548 MiB.
+REJECT on 2 GiB device: exceeds RAM by 500 MiB before extra safety margin.
+Recommendation: upgrade to at least 3 GiB; 4 GiB is a more practical target.

@@ -1,0 +1,50 @@
+Assignment 3 – Task 7: Local Measurements Worksheet
+
+STUDENT DETAILS
+Name: Juhi Surin
+Register Number: 192525148
+Course: CSA0403 Operating Systems
+
+A. ENVIRONMENT
+Compiler/version:
+Linux distribution/version:
+Kernel:
+Native page size:
+Memlock limit (ulimit -l):
+RAM total:
+MemAvailable:
+
+B. REAL-TIME LOOP MEASUREMENTS
+Working set size:
+Unlocked average touch time (ns):
+Unlocked max observed touch time (ns):
+Unlocked minor faults:
+Unlocked major faults:
+Locked average touch time (ns):
+Locked max observed touch time (ns):
+Locked minor faults:
+Locked major faults:
+Did mlock succeed?:
+Configured control-loop deadline (provided by device specification):
+Did measured max remain below deadline?:
+
+C. THREE-TASK SIMULATION
+OS/kernel reserve:
+Real-time locked memory:
+ML memory:
+Logger active buffer:
+Headroom:
+Total:
+Real-time runtime page faults:
+ML simulated first-touch faults:
+Logger simulated first-touch faults:
+PASS/FAIL output:
+
+D. FOURTH TASK
+Additional task size:
+New total:
+Admission decision:
+Recommended RAM:
+Remaining limitation:
+
+Important: The maximum observed latency is not a formal hard-real-time WCET guarantee. Record the exact local output; do not copy values from another computer.
