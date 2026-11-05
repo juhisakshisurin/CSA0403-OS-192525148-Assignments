@@ -1,0 +1,64 @@
+ASSIGNMENT 4 - TASK 3: MEASUREMENT WORKSHEET
+
+STUDENT DETAILS
+Name: Juhi Surin
+Register Number: 192525148
+Course: CSA0403 Operating Systems
+
+A. SYSTEM / FILESYSTEM INSPECTION
+Linux distribution and version:
+Kernel:
+Target mount path:
+Filesystem type:
+Source device:
+Block size (from stat -f or filesystem tool):
+Total blocks:
+Free blocks:
+Total inodes:
+Free inodes:
+Filesystem UUID / label (if available):
+Evidence file: task3_fs_evidence/filesystem_inspection.txt
+Filesystem-specific evidence: task3_fs_evidence/filesystem_specific_details.txt
+
+B. EXT4 VS COPY-ON-WRITE SMALL RANDOM WRITE BENCHMARK
+Test date:
+Drive / device:
+Ext4 mount path:
+COW mount path (Btrfs or ZFS):
+fio version:
+I/O block size:
+Test file size:
+Runtime:
+Direct I/O enabled:
+fsync frequency:
+Run 1 ext4: IOPS / bandwidth / p50 / p95 / p99 latency:
+Run 2 ext4: IOPS / bandwidth / p50 / p95 / p99 latency:
+Run 3 ext4: IOPS / bandwidth / p50 / p95 / p99 latency:
+Run 1 COW: IOPS / bandwidth / p50 / p95 / p99 latency:
+Run 2 COW: IOPS / bandwidth / p50 / p95 / p99 latency:
+Run 3 COW: IOPS / bandwidth / p50 / p95 / p99 latency:
+Interpretation:
+
+C. SNAPSHOT SPACE
+Dataset referenced size:
+Snapshot creation time:
+Initial snapshot-used space:
+Amount changed after snapshot:
+Additional snapshot space after changes:
+Filesystem command used (e.g. btrfs filesystem du / zfs list):
+
+D. POWER-FAILURE / RECOVERY
+Test environment (disposable VM only):
+Filesystem:
+Recovery method (ext4 journal replay / Btrfs tree-log replay / ZFS import+ZIL):
+Measured boot/mount/recovery time:
+Filesystem check required?:
+Data/durability observations:
+Do not pull power or force-reset a production machine.
+
+E. DECISION
+Recommended filesystem for database server:
+Reason:
+Recommended filesystem for snapshot backup server:
+Reason:
+Main trade-offs:
