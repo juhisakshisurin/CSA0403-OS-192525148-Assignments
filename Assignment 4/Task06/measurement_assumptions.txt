@@ -1,0 +1,39 @@
+ASSIGNMENT 4 - TASK 6: DESIGN AND SIMULATION ASSUMPTIONS
+
+SOURCE-GIVEN
+- 200,000 students.
+- Each video size is 300 MB to 2 GB.
+- Videos are uploaded once.
+- Videos are read many thousands of times, mostly during the first week.
+- Students may seek to any minute.
+- Budget supports a few servers with HDDs and SSDs; cloud storage may be used.
+
+DESIGN ASSUMPTIONS (NOT PROVIDED BY QUESTION)
+- 1,000 videos in the catalogue.
+- 1 GiB average video size.
+- 2% simultaneous viewers = 4,000.
+- 8 Mbit/s average stream bitrate.
+- 20% throughput headroom.
+- 4-second video segments.
+- 4 KiB filesystem blocks.
+- 1 MiB initial read-ahead.
+- 3 origin nodes, each 8 x 8 TB HDD RAID10 and 2 x 1.92 TB NVMe RAID1.
+- Replication factor 2 across nodes.
+- 85% hot-cache hit ratio for simulator.
+- 24 HDD service lanes, 8-10 ms random-read service time.
+- 4 SSD service lanes, 0.25-0.40 ms service time.
+- 10,000 playback request simulation at about 1,000 requests/second.
+
+PERFORMANCE TARGETS (DESIGN TARGETS, NOT SOURCE FACTS)
+- p95 playback start <= 2 seconds for campus clients.
+- p95 remote playback start <= 4 seconds.
+- p95 seek-to-play <= 2 seconds.
+- Rebuffering <= 1% of playback time.
+- 99.9% service availability target.
+
+SIMULATION LIMITATIONS
+- Single-server lane pools model storage queues only.
+- No TCP/IP, HTTP, CDN, codec, CPU, encryption or real device firmware is modelled.
+- Service times are assumed, not measured from physical devices.
+- Cache hit rate is fixed at 85%, not measured from popularity logs.
+- Results compare relative behaviour under this model only.

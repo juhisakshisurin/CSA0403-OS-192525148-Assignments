@@ -1,0 +1,139 @@
+ASSIGNMENT 4 - TASK 6: DESIGN CALCULATIONS
+
+A. CATALOGUE CAPACITY (ASSUMED SCENARIO)
+Students: 200,000 (given)
+Video count: 1,000 (assumed for planning)
+Average video size: 1 GiB (assumed; within 300 MB to 2 GB range)
+
+One catalogue copy:
+1,000 videos x 1 GiB = 1,000 GiB = 0.977 TiB.
+
+Two independent replicas:
+2 x 1,000 GiB = 2,000 GiB = 1.953 TiB.
+
+Catalogue size range for 1,000 videos:
+At 300 MB/video: 300,000 MB = 300 GB decimal.
+At 2 GiB/video: 2,000 GiB = 1.953 TiB.
+Two copies at upper range: 4,000 GiB = 3.906 TiB.
+
+B. ORIGIN SERVER CAPACITY
+Three nodes.
+Each node has 8 x 8 TB HDD in RAID 10.
+RAID 10 usable per node = (8 / 2) x 8 TB = 32 TB.
+Cluster usable HDD capacity = 3 x 32 TB = 96 TB.
+At replication factor 2, theoretical logical capacity = 96 / 2 = 48 TB
+(before metadata, operational reserve and rebuild headroom).
+
+Each node has 2 x 1.92 TB NVMe SSD in RAID 1.
+Usable SSD cache per node = 1.92 TB.
+Total SSD cache = 3 x 1.92 TB = 5.76 TB.
+
+C. PEAK THROUGHPUT
+Concurrency assumption = 2% of 200,000 = 4,000 viewers.
+Bitrate assumption = 8 Mbit/s per viewer.
+
+Required payload throughput:
+4,000 x 8 Mbit/s = 32,000 Mbit/s = 32 Gbit/s.
+Convert to bytes: 32 / 8 = 4 GB/s (decimal).
+
+With 20% protocol and growth headroom:
+32 x 1.20 = 38.4 Gbit/s (4.8 GB/s).
+
+Network design:
+3 x 25 GbE = 75 Gbit/s aggregate.
+After one node/link failure: 2 x 25 = 50 Gbit/s.
+50 Gbit/s > 38.4 Gbit/s planning target.
+
+At 85% cache hit:
+SSD output = 0.85 x 32 = 27.2 Gbit/s.
+HDD origin = 0.15 x 32 = 4.8 Gbit/s.
+
+D. STREAM SEGMENT AND SEEK CALCULATION
+Chosen segment duration = 4 s.
+At 8 Mbit/s:
+Segment bytes = 8,000,000 bits/s x 4 s / 8
+              = 4,000,000 bytes = 4 MB decimal.
+
+One minute has 60 / 4 = 15 segments.
+Segment index at minute m = floor(m x 60 / 4) = 15m.
+
+Filesystem block size = 4 KiB.
+A 1 MiB read-ahead = 1,048,576 / 4,096 = 256 filesystem blocks.
+
+Cold seek:
+1 metadata/index I/O (if index page not cached)
++ 1 data read-ahead I/O = up to 2 logical I/O requests.
+
+Warm seek:
+Manifest/time index is in RAM
++ 1 data read-ahead I/O = 1 logical I/O request.
+
+The 4 MB media segment occupies about 977 4 KiB blocks (4,000,000/4,096).
+The initial 1 MiB prefetch is 256 blocks; later blocks stream sequentially.
+
+E. SEGMENT REQUEST RATE
+4,000 concurrent viewers, one new 4-second segment per viewer every 4 seconds:
+4,000 / 4 = 1,000 segment requests/second.
+This is the C simulator's chosen approximate arrival load.
+
+F. CLOUD/CDN ALTERNATIVE - ILLUSTRATIVE MONTHLY TRAFFIC
+Assume each of 200,000 students watches one average 1 GiB video per month:
+200,000 x 1 GiB = 200,000 GiB = 195.3 TiB
+= approximately 214.7 TB decimal transferred to viewers.
+
+If 80% of views are in the first week:
+160,000 GiB = 156.25 TiB (about 171.8 TB decimal) in that week.
+
+At 4 MB per segment:
+1 GiB = 1,073.7 MB; approximately 269 segments/video.
+200,000 x 269 = approximately 53.8 million viewer segment requests/month.
+CDN cache hits reduce object-origin GETs; viewer requests still reach the CDN.
+
+CloudFront published flat-rate pricing (checked 5 November 2026):
+Premium plan base list: USD 1,000/month; listed 50 TB transfer allowance,
+5 TB S3 storage and 500 million requests. The official page notes that
+transfer can be configured up to 600 TB for a new flat-rate price.
+The illustrative 214.7 TB/month exceeds the base 50 TB allowance.
+Therefore, use the configured 600 TB tier quote, not USD 1,000 as the
+final cost for this workload. The 1.074 TB catalogue fits within the listed
+5 TB S3 storage allowance, subject to selected storage class and plan terms.
+
+Cloud monthly charge must include:
+- Configured CloudFront transfer tier price for ~214.7 TB/month
+- Any storage beyond included S3 quota / class / request or management charges
+- Taxes and any non-included services
+A current AWS quote/calculator is required for the final invoice amount.
+
+G. CITY PLAYBACK-START MODEL (ILLUSTRATIVE, NOT A MEASUREMENT)
+Assumptions:
+DNS/TLS setup = 0.25 s
+Initial buffer = 2 seconds of 8 Mbit/s = 16 Mbit = 2 MB
+Viewer throughput = 20 Mbit/s
+Transfer time for initial buffer = 16 / 20 = 0.80 s
+
+Playback start = setup + RTT to edge + initial-buffer transfer.
+
+Assumed edge RTT:
+City A: 20 ms -> 0.25 + 0.020 + 0.80 = 1.07 s.
+City B: 50 ms -> 0.25 + 0.050 + 0.80 = 1.10 s.
+City C: 100 ms -> 0.25 + 0.100 + 0.80 = 1.15 s.
+
+A cache miss may add an assumed 0.3-0.8 s origin-fetch delay.
+Actual values depend on ISP, peering, edge location, client throughput,
+DNS/TLS reuse, cache status and segment size. Measure from real campuses/cities.
+
+H. SIMULATION RESULTS
+HDD-only:
+10,000 requests; arrival ~1,005.48 req/s.
+Mean response 9.007 ms; p50 9.011 ms; p95 9.904 ms;
+p99 9.979 ms; maximum 10.000 ms.
+
+SSD hot-cache + HDD origin:
+10,000 requests; same arrivals; 8,496 cache hits and 1,504 HDD misses.
+Mean response 1.631 ms; p50 0.339 ms; p95 9.360 ms;
+p99 9.886 ms; maximum 10.000 ms.
+
+Mean response improvement = 9.007 / 1.631 = 5.52x.
+Mean response reduction = (1 - 1.631/9.007) x 100 = 81.9%.
+p95 improvement = 9.904 / 9.360 = 1.06x.
+The tail remains HDD-like because 15% are misses.

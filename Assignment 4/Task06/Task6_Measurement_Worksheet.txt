@@ -1,0 +1,77 @@
+ASSIGNMENT 4 - TASK 6: ACTUAL DEPLOYMENT MEASUREMENT WORKSHEET
+
+STUDENT DETAILS
+Name: Juhi Surin
+Register Number: 192525148
+Course: CSA0403 Operating Systems
+
+A. CATALOGUE
+Actual video count:
+Average video size:
+Minimum / maximum video size:
+Current total catalogue size:
+Number of replicas:
+Usable HDD capacity per node:
+Usable SSD cache per node:
+
+B. THROUGHPUT
+Measured simultaneous viewers:
+Average stream bitrate:
+Measured aggregate throughput:
+Target throughput with 20% headroom:
+Network uplink capacity:
+Surviving throughput after one node/link failure:
+
+C. PLAYBACK START AND SEEK PERFORMANCE
+Campus 1 p50 / p95 / p99:
+Campus 2 p50 / p95 / p99:
+Remote city 1 p50 / p95 / p99:
+Remote city 2 p50 / p95 / p99:
+Seek-to-play p95:
+Rebuffering ratio:
+SSD/CDN cache-hit ratio:
+
+D. TWO-DESIGN SIMULATION
+HDD-only average / p50 / p95 / p99 response:
+SSD-cache + HDD-origin average / p50 / p95 / p99 response:
+Cache-hit ratio used:
+Number of requests simulated:
+Interpretation of results:
+
+E. CLOUD / CDN EVALUATION
+Cloud provider and region:
+Catalogue storage (GB-month):
+Monthly viewer data transfer:
+Segment request count:
+CDN cache-hit ratio:
+Object storage charge:
+CDN transfer charge:
+Request charge:
+Other service charges:
+Total monthly estimate:
+Currency and tax assumptions:
+Estimated playback startup by city:
+Operational tasks required:
+
+F. FINAL DESIGN DECISION
+Selected design:
+Why it meets the throughput target:
+Why it supports minute-level seeking:
+Capacity and redundancy rationale:
+Cost rationale:
+Availability rationale:
+Remaining risks and limitations:
+
+EVIDENCE TO ATTACH
+[ ] C program execution screenshot
+[ ] Simulation output file
+[ ] Compiler and operating-system version
+[ ] Actual catalogue and workload figures, where available
+[ ] Physical storage/network benchmark results, if performed
+[ ] Cloud pricing calculator or quotation, if used
+
+IMPORTANT
+Do not report planning assumptions as measured facts. The 1,000-video catalogue,
+1 GiB average size, 4,000 concurrent viewers, 8 Mbit/s bitrate and 85% cache
+hit ratio in the report are illustrative design assumptions. Replace them with
+actual measurements when available.
