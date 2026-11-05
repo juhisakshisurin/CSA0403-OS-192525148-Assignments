@@ -1,0 +1,99 @@
+ASSIGNMENT 5 - PART A - A3
+VIRTUALIZATION MEASUREMENT PLAN AND WORKSHEET
+
+PURPOSE
+Compare a Type-1 KVM host with a Type-2 VirtualBox host using the same guest operating system,
+vCPU count, guest RAM, virtual disk contents, storage device and workload. The assignment
+does not supply host hardware or benchmark results; do not write estimated values as measured
+results.
+
+A. RECORD THE HOST CONFIGURATION
+Physical CPU model:
+CPU core/thread count:
+Intel VT-x / AMD-V visible:
+Virtualization enabled in firmware:
+SLAT support (Intel EPT / AMD NPT):
+Physical RAM:
+Host OS and kernel:
+KVM version / QEMU / libvirt:
+VirtualBox version:
+Storage type and filesystem:
+Network adapter and link speed:
+
+B. KEEP THE TEST FAIR
+1. Use the same physical computer where possible, or two equivalent machines.
+2. Use the same guest OS image and patch level.
+3. Assign the same number of vCPUs and same guest RAM to each VM.
+4. Place virtual disks on equivalent SSD/NVMe storage; use the same virtual disk format and cache policy where possible.
+5. Ensure the host is otherwise idle; repeat each test at least three times.
+6. Record host CPU and memory usage as well as guest results.
+7. Do not benchmark on a production database or the only copy of important data.
+
+C. CPU-BOUND TEST
+If sysbench is installed inside the guest:
+  sysbench cpu --threads=4 --cpu-max-prime=20000 run
+
+Record:
+Hypervisor | Run 1 events/sec | Run 2 | Run 3 | Mean | Guest CPU time | Host CPU use
+KVM       |                 |       |       |      |               |
+VirtualBox|                 |       |       |      |               |
+
+Interpretation:
+Higher events/second is better for this test. Compare only runs with the same
+vCPU/thread count and identical sysbench parameters. This measures the tested guest/host
+combination, not all CPU-bound workloads.
+
+D. I/O-BOUND TEST
+Use a disposable test file on the guest's virtual disk. Do NOT point fio at a raw host disk
+or a device containing important data.
+
+Prepare a test file inside each guest (run once on a disposable path):
+  fio --name=prepare --filename=/var/tmp/a3-fio-testfile --size=2G \
+      --rw=write --bs=1M --direct=1 --iodepth=1 --group_reporting
+
+Then run random-read test:
+  fio --name=randread --filename=/var/tmp/a3-fio-testfile --size=2G \
+      --rw=randread --bs=4k --iodepth=32 --numjobs=1 \
+      --direct=1 --runtime=60 --time_based --group_reporting
+
+Record:
+Hypervisor | IOPS | Bandwidth | Average latency | 95th percentile latency
+KVM       |      |           |                 |
+VirtualBox|      |           |                 |
+
+Interpretation:
+Higher IOPS/bandwidth and lower latency are generally better for this test.
+The result depends on the host filesystem, virtual disk format, cache mode, controller,
+SSD, queue depth and paravirtualized drivers. State these settings alongside the result.
+
+E. MEMORY OVERHEAD
+For each host, record idle host memory before a guest starts, then after each VM starts.
+Use:
+  free -h
+  ps -eo pid,rss,comm --sort=-rss | head -n 20
+Inside each guest:
+  free -h
+
+Record:
+Hypervisor | Host idle used RAM | Host RAM with VM running | Guest configured RAM | Host-side increase
+KVM       |                    |                         |                      |
+VirtualBox|                    |                         |                      |
+
+Do not equate guest-allocated RAM with additional host memory consumed at every instant:
+ballooning, overcommit, page sharing, memory backing and caching can affect the observed value.
+
+F. VM START-UP TIME
+Time three cold starts and report the median.
+Start clock immediately before issuing VM start; stop at a defined guest-ready condition
+(for example, SSH responds and the portal health endpoint returns HTTP 200).
+Use the same guest image and readiness test for both hypervisors.
+
+G. FINAL COMPARISON
+CPU-bound conclusion:
+I/O-bound conclusion:
+Host RAM overhead conclusion:
+VM start-up conclusion:
+Snapshot/restore test:
+Live-migration support/requirements:
+Production suitability:
+Important limitations:
