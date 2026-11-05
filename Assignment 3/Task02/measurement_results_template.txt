@@ -1,0 +1,17 @@
+Assignment 3 – Task 2: Local Linux Measurement Worksheet
+
+Run ./run_task2.sh on your own Ubuntu/WSL system and copy values from environment.txt and page_faults_time.txt.
+
+System:
+- GCC version:
+- Linux distribution and version:
+- Kernel:
+- Native page size from getconf PAGESIZE:
+
+Page-fault probe (/usr/bin/time -v):
+- Minor page faults:
+- Major page faults:
+- Maximum resident set size (KB):
+- Elapsed wall-clock time:
+
+Do not copy environment or page-fault values from another computer.
