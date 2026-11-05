@@ -1,0 +1,32 @@
+ASSIGNMENT 5 - PART A - A2: NETWORK AND ADMINISTRATION PLAN
+
+Illustrative RFC1918 address plan (replace with the university's approved subnets):
+- Management/VPN VLAN: 10.20.10.0/24
+  Gateway 10.20.10.1; admin bastion 10.20.10.10.
+- DMZ / reverse-proxy VLAN: 10.20.20.0/24
+  Gateway 10.20.20.1; Nginx edge 10.20.20.10.
+- Application VLAN: 10.20.30.0/24
+  Gateway 10.20.30.1; application host(s) 10.20.30.11-10.20.30.30.
+- Database VLAN: 10.20.40.0/24
+  Gateway 10.20.40.1; database primary 10.20.40.10; backup replica 10.20.40.11.
+
+DNS:
+- Public results.university.example -> public NAT/load-balancer address (not a literal address in this design).
+- Internal portal-app.service.internal -> 10.20.30.11 (or a private application VIP).
+- Internal portal-db.service.internal -> 10.20.40.10.
+- Use internal DNS for private names; create A/AAAA records only where the address family is deployed.
+- Replace the .example hostname with the university's registered DNS name before production.
+
+Traffic policy:
+- Internet -> Nginx edge: TCP 443 allowed; TCP 80 allowed only to redirect to HTTPS.
+- Admin VPN/management subnet -> SSH: TCP 22 allowed only from approved admin CIDR/bastion.
+- Nginx -> application: TCP 8000 only over the private application network.
+- Application -> database: TCP 5432 only from approved application hosts.
+- Internet -> application port 8000 or database port 5432: denied.
+- Outbound: allow required DNS, NTP, package updates, monitoring, backup destination and certificate renewal.
+
+Single-host demonstration:
+- Nginx listens on 80/443.
+- Gunicorn listens only on 127.0.0.1:8000.
+- PostgreSQL listens on a local Unix socket or loopback only.
+- When the portal is split across hosts, use the private subnets and rules above.

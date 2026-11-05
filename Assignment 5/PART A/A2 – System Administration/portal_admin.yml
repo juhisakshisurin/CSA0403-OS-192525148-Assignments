@@ -1,0 +1,79 @@
+---
+- name: Configure baseline administration for result portal nodes
+  hosts: portal_servers
+  become: true
+  vars:
+    portal_group: portal
+    portal_user: portal
+    portal_root: /srv/result-portal
+    admin_group: portal-admins
+    deploy_group: portal-deploy
+    log_group: portal-logreaders
+  tasks:
+    - name: Install required operating-system packages
+      ansible.builtin.apt:
+        name:
+          - nginx
+          - ufw
+          - openssh-server
+          - logrotate
+        state: present
+        update_cache: true
+
+    - name: Create service group
+      ansible.builtin.group:
+        name: "{{ portal_group }}"
+        system: true
+        state: present
+
+    - name: Create administration groups
+      ansible.builtin.group:
+        name: "{{ item }}"
+        system: true
+        state: present
+      loop:
+        - "{{ admin_group }}"
+        - "{{ deploy_group }}"
+        - "{{ log_group }}"
+
+    - name: Create non-login application service account
+      ansible.builtin.user:
+        name: "{{ portal_user }}"
+        group: "{{ portal_group }}"
+        system: true
+        shell: /usr/sbin/nologin
+        create_home: false
+        state: present
+
+    - name: Create application and log directories
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ item.owner }}"
+        group: "{{ item.group }}"
+        mode: "{{ item.mode }}"
+      loop:
+        - { path: "{{ portal_root }}", owner: "root", group: "{{ portal_group }}", mode: "0750" }
+        - { path: "/var/log/result-portal", owner: "{{ portal_user }}", group: "{{ portal_group }}", mode: "0750" }
+        - { path: "/var/lib/result-portal", owner: "{{ portal_user }}", group: "{{ portal_group }}", mode: "0750" }
+        - { path: "/etc/result-portal", owner: "root", group: "{{ portal_group }}", mode: "0750" }
+
+    - name: Enable and start Nginx
+      ansible.builtin.service:
+        name: nginx
+        enabled: true
+        state: started
+
+    - name: Install result-portal log rotation policy
+      ansible.builtin.copy:
+        src: ../logrotate-result-portal
+        dest: /etc/logrotate.d/result-portal
+        owner: root
+        group: root
+        mode: "0644"
+
+# Extend this playbook with validated templates for the application service,
+# Nginx TLS virtual host, SSH drop-in and firewall rules. Do not enable the
+# service until the application virtual environment, portal.env and TLS
+# certificate are installed. Never place passwords/private keys in this file;
+# use Ansible Vault for secrets.

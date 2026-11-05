@@ -1,0 +1,19 @@
+SSH KEY SETUP AND SAFE HARDENING PROCEDURE
+
+1. On the administrator workstation:
+   ssh-keygen -t ed25519 -C "portal-admin"
+2. Copy the public key to the named admin account:
+   ssh-copy-id adminuser@SERVER_IP
+3. Open a second terminal and confirm key login succeeds before changing sshd settings.
+4. On the server, create:
+   /etc/ssh/sshd_config.d/60-result-portal.conf
+   using the included ssh-hardening.conf.
+5. Validate syntax:
+   sudo sshd -t
+6. Reload, do not terminate the existing session:
+   sudo systemctl reload ssh
+7. Check:
+   sudo sshd -T | grep -E 'permitrootlogin|passwordauthentication|pubkeyauthentication|allowgroups'
+
+The private key stays on the administrator workstation and must never be copied to the server.
+Keep a tested console or recovery path before disabling password access.
