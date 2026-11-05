@@ -1,0 +1,4 @@
+Record these values from your own Ubuntu/WSL terminal before submission:
+gcc --version
+lsb_release -a
+uname -r
