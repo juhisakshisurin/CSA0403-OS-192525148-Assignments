@@ -1,0 +1,15 @@
+B1.1 SYSTEM OBSERVATION - FILL USING YOUR OWN LINUX OUTPUT
+Date/time:
+Linux distribution/version:
+Kernel:
+CPU / number of cores:
+
+ps/top: process count; highest CPU and memory processes; explain STAT, %CPU and %MEM.
+free -h: total, used, available RAM; swap total/used; interpretation.
+vmstat 1 5: note r, b, swpd, free, si, so, us, sy, id, wa; interpretation.
+iostat -xz 1 2: device, await, %util; interpretation.
+df -hT: filesystem with highest use and percentage.
+ss -tulpn: listening TCP/UDP ports; identify Nginx and portal app.
+systemctl status result-portal nginx:
+ufw status verbose:
+Do not use fabricated or copied measurements; capture on your own Linux VM/server.
