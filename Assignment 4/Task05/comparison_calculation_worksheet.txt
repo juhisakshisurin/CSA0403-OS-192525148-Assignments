@@ -1,0 +1,68 @@
+ASSIGNMENT 4 - TASK 5: COMPARISON AND COST WORKSHEET
+
+STUDENT DETAILS
+Name: Juhi Surin
+Register Number: 192525148
+Course: CSA0403 Operating Systems
+
+A. UNIVERSITY WORKLOAD
+Logical data volume D (TB):
+Active users U:
+Average read IOPS per user:
+Average write IOPS per user:
+Peak simultaneous users:
+Campus locations:
+Home/remote access proportion:
+Required availability:
+Required recovery time:
+
+B. STORAGE OPTIONS
+NFS server count and HA approach:
+Distributed system chosen (CephFS / HDFS / other):
+Replica count and placement:
+Cloud provider / region / object class:
+Client interface required (POSIX / API / portal / sync):
+
+C. CAPACITY
+Single-copy raw capacity D:
+Three-replica raw capacity 3D:
+Extra replication capacity 2D:
+Additional backup/snapshot capacity:
+Operational free-space reserve:
+
+D. SINGLE NFS QUEUE MODEL
+NFS sustainable service rate mu (IOPS):
+Per-user request rate lambda0:
+Number of users U:
+Aggregate rate lambda = U x lambda0:
+Utilisation rho = lambda / mu:
+S = 1/mu:
+Estimated mean response W = S / (1-rho):
+Observed read latency:
+Observed write latency:
+
+E. COST
+NFS hardware / storage / network / administration per month:
+Distributed nodes / 3x media / network / operations per month:
+Cloud GB-month:
+Cloud request cost:
+Cloud retrieval / egress cost:
+Cloud management / identity / backup cost:
+Total estimated monthly cost for each option:
+
+F. CONSISTENCY AND AVAILABILITY
+Consistency model:
+Replica failure assumption:
+Behaviour on one storage node failure:
+Metadata/quorum dependency:
+NFS server single point of failure?:
+Recovery/failover design:
+
+G. FINAL DECISION
+Selected architecture:
+Why it fits campus + home access:
+Consistency rationale:
+Performance rationale:
+Cost rationale:
+Availability rationale:
+Remaining risks:

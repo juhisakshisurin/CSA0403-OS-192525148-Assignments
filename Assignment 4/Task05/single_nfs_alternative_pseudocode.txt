@@ -1,0 +1,86 @@
+ASSIGNMENT 4 - TASK 5
+ALTERNATIVE CONCEPT: ONE LARGE NFS SERVER VS REPLICATED DISTRIBUTED STORAGE
+
+A. SINGLE NFS SERVER
+
+INPUT:
+    U active users
+    D logical data volume
+    lambda0 average IO requests per user per second
+    mu NFS server service capacity (requests per second)
+
+CALCULATE:
+    lambda = U * lambda0
+    rho = lambda / mu
+
+    if rho >= 1:
+        report "Server is saturated; queue is unstable under this model"
+    else:
+        mean_response_time = 1 / (mu - lambda)
+        # Equivalent form: idle_service_time / (1 - rho)
+
+READ:
+    authenticate client
+    check path and permissions
+    consult server metadata / page cache
+    enqueue read request on the NFS server
+    read requested data from server storage if cache misses
+    return data to client
+
+WRITE:
+    authenticate client
+    check path and permissions
+    enqueue write request
+    buffer or cache data according to NFS/server policy
+    commit data/metadata to stable storage as required
+    acknowledge write according to configured stability semantics
+
+FAILURE:
+    if the only NFS server fails:
+        shared files unavailable until server/storage recovery
+        unless a separate HA or failover design exists
+
+B. THREE-REPLICA DISTRIBUTED FILE SYSTEM
+
+WRITE(file, data):
+    metadata_service = locate_file_or_object(file)
+    replica_set = choose_three_healthy_nodes(
+        prefer_failure-domain separation, such as different racks
+    )
+    send data to replica_1
+    pipeline or parallelise writes to replica_2 and replica_3
+    wait for configured durability/acknowledgement condition
+    commit metadata and acknowledge the client
+
+READ(file, offset):
+    replica_set = locate_healthy_replicas(file, offset)
+    choose a healthy replica close to the client
+    read requested data
+    verify integrity according to the storage system
+    return data
+
+NODE_FAILURE(node):
+    mark node unavailable after health detection
+    continue reads from healthy copies if policy/quorum permits
+    schedule reconstruction of missing replicas onto healthy nodes
+    restore target replication count when sufficient capacity exists
+
+C. COMPLEXITY / CAPACITY COMPARISON
+
+Single NFS:
+    logical data capacity = D
+    average queue response (simplified M/M/1) = 1 / (mu - lambda)
+    one server failure can stop the shared service
+
+Three replicas:
+    raw data capacity approximately = 3D
+    extra capacity versus one copy = 2D
+    read chooses one healthy replica (plus metadata/placement lookup)
+    write sends data to three copies; network and slowest/required ACK path
+    contribute to write latency
+    one node failure can be tolerated if copies and metadata are healthy
+
+NOTE:
+This is algorithmic pseudocode, not executable C. Actual performance depends on
+server hardware, network, cache hit rate, user workload, metadata service,
+replica placement, consistency policy, and queueing configuration.
